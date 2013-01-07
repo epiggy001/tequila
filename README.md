@@ -7,5 +7,3 @@ Dependency
 Module management: RequireJS
 
 Testing: Qunit
-
-CSS: Less
