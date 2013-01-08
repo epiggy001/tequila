@@ -1,4 +1,4 @@
-define(['../util/oo'],function (oo) {
+define(['../basic/oo'],function (oo) {
   return {
     RunTests: function () {
       module('Interface');
@@ -87,15 +87,62 @@ define(['../util/oo'],function (oo) {
             }
           }
         });
+        var class3 =oo.extend(class1, {
+          init:function(val1,val2){
+            this._super(val1);
+            this.val2 = val2;
+          },
+          proto:{
+            method2:function(num) {
+              return this._super() + this.val2;
+            }
+          }
+        })
         var instance1 = new class1('val1');
         var instance2 = new class2('val1', 'val2');
+        var instance3 = new class3('val1', 1);
         equal(instance1.property1, instance2.property1, 'Property in inherited');
         equal(instance1.method1(), instance2.method1(), 'Method is inherited');
         equal(instance2.property2, 3, 'Property is over written');
         equal(instance2.method2(), 3, 'Method is over wrritten');
         equal(instance2.property3, 4, 'New property is added');
         equal(instance2.method3(), 4, 'New method is added'); 
+        ok((instance3.val1 == 'val1' && instance3.val2 == 1), '_super is set successfully in constructor');
+        ok((instance3.method1() == 1 && instance3.method2() == 3), '_super is set successfully in method');
       })
+       module('Decorator');
+       test('Create decorator', function(){
+        var class1 = oo.create({
+          init: function(num) {
+            this.num = num;
+          },
+          proto:{
+            property1: 1,
+            property2: 2,
+            method1: function(val){
+              return val
+            },
+            method2:function(){
+              return 2
+            },
+            method3: function() {
+              return this.num;
+            }
+          }
+        });
+        var class2 = oo.decorator(class1, function(methodName, method, args){
+          if (methodName == 'method1') {
+            args[0]+=1;
+            return method(args);
+          } else {
+             return method(args) + 1;
+          }
+        });
+        var instance2 = new class2(1);
+        equal(instance2.method1(2), 3 , 'Arguments is set right');
+        equal(instance2.method2(), 3 , 'Method is set right')
+        equal(instance2.method3(), 2 , 'This is set right')
+       })
     }
   }
 });
