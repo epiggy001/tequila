@@ -1,4 +1,4 @@
-define([], function(){
+define(['./util'], function(util){
   return ({
     inf: function(name, methods){
       var inf = {};
@@ -107,11 +107,12 @@ define([], function(){
           if (typeof klass.prototype[key] == 'function'){
             klass.prototype[key] = (function (method, methodName){
               return function(){
+                var args = arguments
                 var self = this;
-                run = function(args){
+                var run = function(){
                   return method.apply(self, args)
                 }
-                return opt.call(this, methodName, run, arguments)
+                return opt.call(this, methodName, run, util.clone(arguments))
               }
             }(klass.prototype[key], key))
           }

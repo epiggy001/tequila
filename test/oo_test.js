@@ -132,14 +132,13 @@ define(['../basic/oo'],function (oo) {
         });
         var class2 = oo.decorator(class1, function(methodName, method, args){
           if (methodName == 'method1') {
-            args[0]+=1;
-            return method(args);
+            return method();
           } else {
-             return method(args) + 1;
+             return method() + 1;
           }
         });
         var instance2 = new class2(1);
-        equal(instance2.method1(2), 3 , 'Arguments is set right');
+        equal(instance2.method1(2), 2 , 'Arguments is set right');
         equal(instance2.method2(), 3 , 'Method is set right')
         equal(instance2.method3(), 2 , 'This is set right')
        })
