@@ -130,16 +130,19 @@ define(['../basic/oo'],function (oo) {
             }
           }
         });
-        var class2 = oo.decorator(class1, function(methodName, method, args){
+        var class2 = oo.decorator(class1, function(methodName, instance, args){
           if (methodName == 'method1') {
-            return method();
+            args[0]+=1;
+            return instance.run();
+          } else if (methodName == 'method2') {
+            return true;
           } else {
-             return method() + 1;
+             return instance.run() + 1;
           }
         });
         var instance2 = new class2(1);
-        equal(instance2.method1(2), 2 , 'Arguments is set right');
-        equal(instance2.method2(), 3 , 'Method is set right')
+        equal(instance2.method1(2), 2 , 'Arguments is set to read only');
+        equal(instance2.method2(), true , 'Method is set right')
         equal(instance2.method3(), 2 , 'This is set right')
        })
     }

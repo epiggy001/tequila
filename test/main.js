@@ -1,7 +1,9 @@
 QUnit.config.autostart = false;
-require(['oo_test'],
-  function (oo_test) {
+require(['oo_test', 'util_test'],
+  function () {
     QUnit.start();
-    oo_test.RunTests();
+    for (var i=0; i<arguments.length; i++) {
+      arguments[i].RunTests();
+    }
   }
 );

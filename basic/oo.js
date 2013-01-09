@@ -109,10 +109,11 @@ define(['./util'], function(util){
               return function(){
                 var args = arguments
                 var self = this;
-                var run = function(){
+                var instance = {};
+                instance.run = function(){
                   return method.apply(self, args)
                 }
-                return opt.call(this, methodName, run, util.clone(arguments))
+                return opt.call(this, methodName, instance, util.clone(arguments))
               }
             }(klass.prototype[key], key))
           }
