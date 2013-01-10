@@ -56,6 +56,33 @@ define(['../basic/oo'],function (oo) {
         equal(class2.statValue, 1 , 'Set static property');
         equal(class2.statMethod(), 'method' ,'Set static method');
       });
+      test('Basic functions', function(){
+        var class1 = oo.create({
+          proto: {
+            val1: 1,
+            val2:2
+          }
+        });
+        var instance = new class1();
+        var func1 = function(){
+          instance.val1 += 1;
+        }
+        var func2 = function() {
+          instance.val2 += 1;
+        }
+        instance.bind('event1', func1);
+        instance.bind('event1', func2);
+        instance.trigger('event1');
+        equal(instance.val1, 2, 'Trigger func1');
+        equal(instance.val2, 3, 'Trigger func2');
+        instance.unbind('event1', func1);
+        instance.trigger('event1');
+        equal(instance.val1, 2, 'func1 unbinded');
+        equal(instance.val2, 4, 'Trigger func2');
+        instance.unbind('event1');
+        instance.trigger('event1');
+        equal(instance.val2, 4, 'func2 unbinded');
+      });
       test('Extend Class', function(){
         var class1 = oo.create({
           init:function(val1){

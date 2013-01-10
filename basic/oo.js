@@ -37,7 +37,31 @@ define(['./util'], function(util){
           }
         }
       }
-      klass.prototype = {};
+      klass.prototype = {
+        bind:function(ename, handler){
+          if (!this._callbacks) {
+            this._callbacks = {};
+          }
+          if (!this._callbacks[ename]) {
+            this._callbacks[ename] = $.Callbacks();
+          }
+          this._callbacks[ename].add(handler);
+        },
+        unbind:function(ename, handler){
+          if (this._callbacks[ename]) {
+            if (handler == null) {
+              this._callbacks[ename] = null;
+              return;
+            }
+            this._callbacks[ename].remove(handler);
+          }
+        },
+        trigger:function(ename){
+          if (this._callbacks[ename]) {
+            this._callbacks[ename].fire(ename);
+          }
+        }
+      };
       if (obj.proto && (typeof obj.proto == 'object')) {
         for (var key in obj.proto) {
           if (obj.proto.hasOwnProperty(key)) {
