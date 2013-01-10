@@ -1,4 +1,5 @@
 define(['../basic/oo'],function (oo) {
+  'use strict';
   return {
     RunTests: function () {
       module('Interface');
@@ -111,7 +112,7 @@ define(['../basic/oo'],function (oo) {
         ok((instance3.method1() == 1 && instance3.method2() == 3), '_super is set successfully in method');
       })
        module('Decorator');
-       test('Create decorator', function(){
+       test('Create Decorator', function(){
         var class1 = oo.create({
           init: function(num) {
             this.num = num;

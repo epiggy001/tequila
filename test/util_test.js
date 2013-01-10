@@ -1,4 +1,5 @@
 define(['../basic/util'],function (util) {
+  'use strict';
   return {
     RunTests: function () {
       module('Utility functions');

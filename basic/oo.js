@@ -1,4 +1,5 @@
 define(['./util'], function(util){
+  'use strict';
   return ({
     inf: function(name, methods){
       var inf = {};
@@ -14,6 +15,7 @@ define(['./util'], function(util){
         for (var i = 0; i<this.methods.length; i++) {
           if (!instance[this.methods[i]] || (typeof instance[this.methods[i]] != 'function')) {
             result = false;
+            console.error(this.methods[i] + ' must be implemented for interface: ' + this.name);
             break;
           }
         }

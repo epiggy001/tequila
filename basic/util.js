@@ -1,4 +1,5 @@
 define([], function(){
+  'use strict';
   return {
     clone: function clone(obj) {
       if (null == obj || typeof obj != 'object') {
