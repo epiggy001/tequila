@@ -11,6 +11,9 @@ define(['./util'], function(util){
         }
       }
       inf.validate = function(instance){
+        if (!instance) {
+          return false;
+        }
         var result = true;
         for (var i = 0; i<this.methods.length; i++) {
           if (!instance[this.methods[i]] || (typeof instance[this.methods[i]] != 'function')) {
@@ -56,9 +59,14 @@ define(['./util'], function(util){
             this._callbacks[ename].remove(handler);
           }
         },
-        trigger:function(ename){
-          if (this._callbacks[ename]) {
-            this._callbacks[ename].fire(ename);
+        trigger:function(){
+          if (arguments.length > 0 ) {
+           var ename = arguments[0];
+          } else {
+            return;
+          }
+          if ((this._callbacks) && (this._callbacks[ename])) {
+            this._callbacks[ename].fire.apply(this, arguments);
           }
         }
       };

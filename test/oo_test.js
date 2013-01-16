@@ -70,9 +70,18 @@ define(['../basic/oo'],function (oo) {
         var func2 = function() {
           instance.val2 += 1;
         }
+        var s = 0;
+        var sum = function() {
+          for (var i=0; i<arguments.length; i++) {
+            s+=i;
+          }
+        }
         instance.bind('event1', func1);
         instance.bind('event1', func2);
+        instance.bind('event2', sum);
         instance.trigger('event1');
+        instance.trigger('event2', 1, 2, 3);
+        equal(s, 6, 'Arguments is passed');
         equal(instance.val1, 2, 'Trigger func1');
         equal(instance.val2, 3, 'Trigger func2');
         instance.unbind('event1', func1);
