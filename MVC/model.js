@@ -8,7 +8,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
       this._wrapper = Model.inf.validate(opt.wrapper) ? opt.wrapper : null;
     },
     stat:{
-      inf: oo.inf('model', ['insert', 'remove', 'update', 'load'])
+      inf: oo.inf('model', ['insert', 'remove', 'update', 'load', 'getData'])
     },
     proto: {
       _genKey: function() {
@@ -71,13 +71,17 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         }
         return count;
       },
-      toJSON: function(){
+      getData: function(){
         var out = [];
         $.each(this._store, function(key, value) {
           var tmp = util.clone(value);
           delete tmp._key_;
           out.push(tmp);
         })
+        return out;
+      },
+      toJSON: function(){
+        var out = this.getData();
         return JSON.stringify(out);
       },
       filter: function(func) {

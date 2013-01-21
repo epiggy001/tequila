@@ -1,4 +1,4 @@
-define(['../basic/oo'], function(oo){
+define(['../basic/oo', '../basic/util'], function(oo, util){
   'use strict';
   var Record = oo.create({
     init: function(opt, validation) {
@@ -26,7 +26,7 @@ define(['../basic/oo'], function(oo){
           console.error('Fail to validate record');
           return null
         }
-      }
+      },
     }
   })
   return Record
