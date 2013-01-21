@@ -28,7 +28,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
           [{name:'field1', def: 1}, {name:'field2'}],
           validate
         );
-        var rec1 = record1.create({field1: 2, field2: 11, field3: 1}, 'Test Field Checking');
+        var rec1 = record1.create({field1: 2, field2: 11, field3: 1});
         deepEqual(rec1, {field1: 2, field2: 11})
         var rec1 = record1.create({field2: 11});
         deepEqual(rec1, {field1: 1, field2: 11}, 'Test Default Value');
@@ -139,7 +139,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         });
         model1.bind('onUpdate', function(event, old, now){
           deepEqual(tmp, old, 'onUpdate: old');
-          ok(now.field2, 3, 'onUpdate: new');
+          ok(now.field2 == 3, 'onUpdate: new');
         });
         model1.bind('onRemove', function(event, rec){
           deepEqual(rec1, rec);
@@ -150,6 +150,30 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         model1.update(rec1, {field2: 3});
         model1.remove(rec1);
       });
+      module('MVC: EJS');
+      test('Render EJS', function(){
+        var tmpl = new MVC.EJS({url: 'test/hello.ejs'}).render({message: 'hello, world'});
+        equal(tmpl , 'hello, world', 'Render Template')
+      });
+      module('MVC: View', {
+        setup:function(){
+          $("#qunit-fixture").append("<div id='target'>123</div>");
+        }
+      });
+      test('Create View', function(){
+        var model = new MVC.Model({
+          fields: [{name: 'field1', primary: true}],
+        });
+        model.insert({field1: 1});
+        model.insert({field1: 2});
+        var view = new MVC.View({
+          data: model,
+          url: 'test/test.ejs',
+          renderTo: 'target'
+        })
+        view.render();
+        equal($('#target').html(), '<div>1</div>\n\n   <div>2</div>')
+      })
     }
   }
 })
