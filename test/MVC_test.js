@@ -155,12 +155,13 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         var tmpl = new MVC.EJS({url: 'test/hello.ejs'}).render({message: 'hello, world'});
         equal(tmpl , 'hello, world', 'Render template')
       });
-      module('MVC: View', {
+      module('MVC: Controller', {
         setup:function(){
           $("#qunit-fixture").append("<div id='target'></div>");
         }
       });
       test('Create Controller', function(){
+        expect(8);
         var model = new MVC.Model({
           fields: [{name: 'field1', primary: true}],
         });
@@ -169,11 +170,33 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         var controller = new MVC.Controller({
           model: model,
           url: 'test/test.ejs',
-          renderTo: 'target'
-        })
+          renderTo: 'target',
+          events:{
+            'BeforeRender': function(){
+              ok(true, 'BeforeRender Event trigger');
+            },
+            'OnRender': function(){
+              ok(true, 'OnRender trigger');
+            },
+            'Customize': function(){
+              equal(this.model, model, 'Test key word of this');
+            }
+          },
+          handlers: [{
+            event: 'click',
+            selector: '.item',
+            handler: function(event){
+              ok(true, 'Div click is triggered');
+            }
+          }]
+        });
         controller.render();
-        deepEqual(controller.model, model, 'Set model');
-        equal($('#target').html(), '<div>1</div>\n\n   <div>2</div>', 'Render template')
+        $('.item').trigger('click');
+        controller.trigger('Customize');
+        equal(controller.model, model, 'Set model');
+        deepEqual(controller.data, model.getData(), 'Set data');
+        equal($('#target').html(), '<div class="item">1</div>\n\n   <div class="item">2</div>', 'Render template');
+        
       })
     }
   }
