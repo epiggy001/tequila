@@ -157,7 +157,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
       });
       module('MVC: View', {
         setup:function(){
-          $("#qunit-fixture").append("<div id='target'>123</div>");
+          $("#qunit-fixture").append("<div id='target'></div>");
         }
       });
       test('Create Controller', function(){
@@ -167,11 +167,12 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         model.insert({field1: 1});
         model.insert({field1: 2});
         var controller = new MVC.Controller({
-          data: model,
+          model: model,
           url: 'test/test.ejs',
           renderTo: 'target'
         })
         controller.render();
+        deepEqual(controller.model, model, 'Set model');
         equal($('#target').html(), '<div>1</div>\n\n   <div>2</div>', 'Render template')
       })
     }
