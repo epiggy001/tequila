@@ -1,6 +1,6 @@
 define(['../basic/oo', '../basic/util', './EJS'], function(oo, util, EJS){
   'use strict';
-  var View = oo.create({
+  var Controller = oo.create({
     init: function(opt) {
       this.model = opt.model ? opt.model : null;
       if (!this.model) {
@@ -40,5 +40,5 @@ define(['../basic/oo', '../basic/util', './EJS'], function(oo, util, EJS){
       }
     }
   })
-  return View
+  return Controller
 })
