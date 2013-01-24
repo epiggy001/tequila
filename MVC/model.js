@@ -8,7 +8,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
       this._wrapper = Model.inf.validate(opt.wrapper) ? opt.wrapper : null;
     },
     stat:{
-      inf: oo.inf('model', ['insert', 'remove', 'update', 'load', 'getData'])
+      inf: oo.inf('model', ['insert', 'remove', 'update', 'load', 'getData', 'findByKey'])
     },
     proto: {
       _genKey: function() {
@@ -98,6 +98,20 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         if (this._wrapper) {
           
         } 
+      },
+      findByKey:function(key){
+        var temp = this.filter(function(rec){
+          if (rec._key_ == key) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        if (temp.length > 0) {
+          return temp[0];
+        } else {
+          return null;
+        }
       }
     }
   })

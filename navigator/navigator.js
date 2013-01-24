@@ -80,10 +80,6 @@ define(['../basic/oo', '../basic/util'], function(oo, util){
           }
         })
       })
-    },
-    stat: {
-      _checkBrace:checkBrace,
-      _match:match
     }
   })
   return Navigator

@@ -74,6 +74,12 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         var rec2 = model1.insert(data2);
         equal(rec2, null, 'Reject invalidate record');
       });
+      test('Find by key', function(){
+        var data1 = {key: 1, field1: 'field1'};
+        var rec1 = model1.insert(data1);
+        deepEqual(model1.findByKey(rec1._key_), rec1 , 'Find by key');
+        deepEqual(model1.findByKey("123412"), null , 'Test wrong key');
+      });
       test('Remove record', function(){
         var data1 = {key: 1, field1: 'field1'};
         var data2 = {key: 2, field1: 'field1', field2: 2};
