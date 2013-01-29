@@ -75,7 +75,6 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         var out = [];
         $.each(this._store, function(key, value) {
           var tmp = util.clone(value);
-          delete tmp._key_;
           out.push(tmp);
         })
         return out;

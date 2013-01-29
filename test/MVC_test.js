@@ -92,7 +92,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
       test('Update record', function(){
         var data = {key: 1, field1: 'field1'};
         var rec = model1.insert(data);
-        model1.update(rec, {field1: 'field2'});
+        var out = model1.update(rec, {field1: 'field2'});
         ok(rec.key == 1 && rec.field1 == 'field2' && rec.field2 == 1, 'Return record is updated');
         deepEqual(model1._store[rec._key_], rec, 'Update success');
         model1.update(rec ,{field2: -1});
@@ -167,7 +167,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         }
       });
       test('Create Controller', function(){
-        expect(8);
+        expect(11);
         var model = new MVC.Model({
           fields: [{name: 'field1', primary: true}],
         });
@@ -202,7 +202,8 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         equal(controller.model, model, 'Set model');
         deepEqual(controller.data, model.getData(), 'Set data');
         equal($('#target').html(), '<div class="item">1</div>\n\n   <div class="item">2</div>', 'Render template');
-        
+        controller.render([{field1:3}]);
+        equal($('#target').html(), '<div class="item">3</div>', 'Render template with data');
       })
     }
   }

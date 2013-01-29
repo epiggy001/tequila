@@ -22,7 +22,17 @@ define(['../basic/oo', '../basic/util', './EJS'], function(oo, util, EJS){
       this._handlers = opt.handlers ? opt.handlers : [];
     },
     proto: {
-      render : function(){
+      _setData: function(data) {
+          this.data = data;
+      },
+      render : function(data){
+        if (data) {
+          this._setData(data);
+        } else {
+          if (this.model) {
+            this.data = this.model.getData();
+          }
+        }
         if (!this._tmpl) {
           this._tmpl = new EJS({url: this._url});
         }
