@@ -167,7 +167,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         }
       });
       test('Create Controller', function(){
-        expect(11);
+        expect(16);
         var model = new MVC.Model({
           fields: [{name: 'field1', primary: true}],
         });
@@ -192,6 +192,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
             event: 'click',
             selector: '.item',
             handler: function(event){
+              equal(this, controller, 'This is set');
               ok(true, 'Div click is triggered');
             }
           }]
@@ -202,6 +203,14 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         equal(controller.model, model, 'Set model');
         deepEqual(controller.data, model.getData(), 'Set data');
         equal($('#target').html(), '<div class="item">1</div>\n\n   <div class="item">2</div>', 'Render template');
+        controller.renderWithFilter(function(rec){
+          if (rec.field1 > 1) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        equal($('#target').html(), '<div class="item">2</div>', 'Render template with filter');
         controller.render([{field1:3}]);
         equal($('#target').html(), '<div class="item">3</div>', 'Render template with data');
       })

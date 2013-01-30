@@ -26,17 +26,34 @@ require(['../../MVC/MVC', '../../navigator/navigator'],
         event: 'click',
         selector: '.edit',
         handler: function(event){
-          $('#view-block').css('display', 'none');
-          $('#edit-block').css('display', 'block');
+          editTodo.render(this.data)
         }
-      }, {
+      },{
         event: 'click',
-        selector:'.save',
+        selector: '.delete',
         handler: function(event){
-          var title = $('input').val();
-          var detail = $('textarea').val();
-          todos.update(todoDetail.data, {title:title, detail:detail});
-          todoDetail.render();
+          this.destroy();
+          todos.remove(this.data)
+        }
+      }]
+    });
+    
+    var editTodo = new MVC.Controller({
+      url: 'tmpl/editTodo.ejs',
+      renderTo:'right',
+      handlers: [{
+        event: 'click',
+        selector: '.save',
+        handler: function(event){
+          var title = $('#edit-title').val();
+          var detail = $('#edit-detail').val();
+          if (editTodo.data._key_) {
+            todos.update(this.data, {title:title, detail:detail});
+            todoDetail.render(editTodo.data);
+          } else {
+            var rec = todos.insert({title:title, detail:detail});
+            todoDetail.render(rec);
+          }
         }
       }]
     });
@@ -48,6 +65,21 @@ require(['../../MVC/MVC', '../../navigator/navigator'],
     });
     $(function(){
       todosController.render();
+      $('#search').bind('keyup', function(){
+        var key = $('#search').val();
+        if (key == null || key == '') {
+          todosController.render();
+        }
+        todosController.renderWithFilter(function(rec){
+          if (rec.title.indexOf(key) != -1) {
+            return true;
+          }
+          return false;
+        })
+      });
+      $("#add").click(function(event){
+        editTodo.render({});
+      })
     })
   }
 );

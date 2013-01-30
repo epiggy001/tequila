@@ -1,21 +1,8 @@
-<div style="display:block" id = "view-block">
-  <h4><%= data.title %></h4>
-  <div><%= data.detail %></div>
+<div id = "view-block">
+  <h2><%= data.title %></h2>
+  <p class="lead"><%= data.detail %></p>
   <div>
-  <button class="edit">Edit</button>
-  </div>
-</div>
-
-<div id="edit-block" style="display:none">
-  <div>
-    <input typle="text" value = "<%= data.title %>" >
-  </div>
-  <div>
-    <textarea rows="4" cols="50">
-      <%= data.detail %>
-    </textarea>
-  </div>
-  <div>
-    <button class="save">Save</button>
+    <button class="btn btn-primary edit">Edit</button>
+    <button class="btn btn-danger delete">Delete</button>
   </div>
 </div>
