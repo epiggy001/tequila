@@ -26,7 +26,7 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
       test('Create AjaxModel', function(){
         equal(model._url, 'test', 'Url is set');
       });
-      test('Insert a record', function(){
+      asyncTest('Insert a record', function(){
         expect(6)
         model.bind('onChange', function(){
           ok(true, 'onChange');
