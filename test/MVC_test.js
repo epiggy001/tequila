@@ -55,7 +55,6 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         deepEqual(model1._record, new MVC.Record([{name: 'key'}, {name: 'field1'}, {name: 'field2', def: 1}], validation),
           'Record is created');
         deepEqual(model1._primary, 'ID', 'Pirmary Key is ID');
-        deepEqual(model1._wrapper, null, 'Wrapper is set to null');
         var model2 = new MVC.Model({
           fields: [{name: 'key'}, {name: 'field1'}, {name: 'field2', def: 1}],
           validate: validation,

@@ -5,10 +5,9 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
       this._store = {};
       this._record = new Record(opt.fields, opt.validate);
       this._primary = opt.primary ? opt.primary : 'ID';
-      this._wrapper = Model.inf.validate(opt.wrapper) ? opt.wrapper : null;
     },
     stat:{
-      inf: oo.inf('model', ['insert', 'remove', 'update', 'load', 'getData', 'findByKey'])
+      inf: oo.inf('model', ['insert', 'remove', 'update', 'load', 'getData', 'findByKey', 'filter'])
     },
     proto: {
       _genKey: function() {
@@ -29,10 +28,6 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         if (rec) {
           rec._key_ = this._genKey();
           this._store[rec._key_] = rec;
-          if (this.wrapper) {
-            var key = this.wrapper.insert(this._getData(rec));
-            rec[this._primary] = key;
-          }
           this.trigger('onChange');
           this.trigger('onInsert', util.clone(rec));
         }
@@ -43,9 +38,6 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
           return;
         }
         delete this._store[rec._key_];
-        if (this.wrapper) {
-          this.wrapper.remove(this._primary, rec[this._primary]);
-        };
         this.trigger('onChange');
         this.trigger('onRemove', rec);
       },
@@ -57,9 +49,6 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
           this.trigger('onChange');
           this.trigger('onUpdate', util.clone(rec), util.clone(tmp));
           $.extend(rec, obj);
-          if (this.wrapper) {
-            this.wrapper.update(this._primary, rec);
-          }
         }
       },
       count: function() {

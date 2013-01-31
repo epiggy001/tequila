@@ -28,6 +28,7 @@ define(['./util'], function(util){
     },
     create: function(obj) {
       var klass;
+      var constructor
       if (obj.init && (typeof obj.init == 'function')) {
         klass = obj.init;
       } else {
@@ -130,28 +131,33 @@ define(['./util'], function(util){
       return klass;
     },
     decorator: function(target, opt){
-      var klass = target;
+      var klass = function() {
+        console.log(this);
+        target.apply(this, arguments);
+      };
       var tmp = function(){};
       tmp.prototype = target.stat;
       klass.stat = new tmp();
       tmp.prototype = target.prototype;
       klass.prototype = new tmp();
-      if (typeof opt == 'function') {
-        for (var key in klass.prototype) {
-          if (typeof klass.prototype[key] == 'function'){
-            klass.prototype[key] = (function (method, methodName){
-              return function(){
-                var args = arguments
-                var self = this;
-                var instance = {};
-                instance.run = function(){
-                  return method.apply(self, args)
+      if (opt) {
+        $.each(opt,function(key, func){
+          if (typeof func == 'function') {
+            if (typeof klass.prototype[key] == 'function'){
+              klass.prototype[key] = (function (method, methodName){
+                return function(){
+                  var args = arguments
+                  var self = this;
+                  var instance = {};
+                  instance.run = function(){
+                    return method.apply(self, args)
+                  }
+                  return func.call(this, methodName, instance, arguments)
                 }
-                return opt.call(this, methodName, instance, util.clone(arguments))
-              }
-            }(klass.prototype[key], key))
+              }(klass.prototype[key], key))
+            }
           }
-        }
+        });
       }
       return klass;
     }
