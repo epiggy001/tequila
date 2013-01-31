@@ -55,7 +55,6 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         deepEqual(model1._record, new MVC.Record([{name: 'key'}, {name: 'field1'}, {name: 'field2', def: 1}], validation),
           'Record is created');
         deepEqual(model1._primary, 'ID', 'Pirmary Key is ID');
-        deepEqual(model1._wrapper, null, 'Wrapper is set to null');
         var model2 = new MVC.Model({
           fields: [{name: 'key'}, {name: 'field1'}, {name: 'field2', def: 1}],
           validate: validation,
@@ -111,6 +110,14 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         ok(model1.count()==2, 'State after insert is ok');
         model1.remove(rec1);
         ok(model1.count()==1, 'State after remove is ok');
+      });
+      test('Clear store', function(){
+        var data1 = {key: 1, field1: 'field1'};
+        var data2 = {key: 2, field1: 'field1', field2: 2};
+        var rec1 = model1.insert(data1);
+        var rec2 = model1.insert(data2);
+        model1.clear();
+        ok(model1.count() == 0, 'Clear all data');
       });
       test('Filter record', function(){
         var data1 = {key: 1, field1: 'field1'};
@@ -213,7 +220,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         equal($('#target').html(), '<div class="item">2</div>', 'Render template with filter');
         controller.render([{field1:3}]);
         equal($('#target').html(), '<div class="item">3</div>', 'Render template with data');
-      })
+      });
     }
   }
 })
