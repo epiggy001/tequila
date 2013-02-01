@@ -7,6 +7,12 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
         type:'POST',
         responseText: { primary:1}
       });
+      var loadData = [{ID:1, field1:'data1', field2:'data2'}, {ID:2, field1:'data3', field2:'data4'}];
+      $.mockjax({
+        url:  'test',
+        type:'GET',
+        responseText: loadData
+      });
       $.mockjax({
         url:  'test/1',
         type: 'PUT',
@@ -48,6 +54,26 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
           }
         });
       });
+      asyncTest('Load records', function(){
+        expect(4);
+        var model = new MVC.AjaxModel({
+          url:'test',
+          fields: [{name: 'ID'}, {name: 'field1'}, {name: 'field2'}],
+        });
+        model.bind('onChange', function(){
+          ok(true, 'onChange');
+        });
+        model.bind('onLoad', function(event){
+          ok(true, 'onLoad is trigger');
+        });
+        var conditions = {condtion1: 'condtion1'}
+        model.load({param:conditions, success: function(data, param){
+          start();
+          deepEqual(conditions, param, 'Param is set');
+          deepEqual(data, loadData, 'Data is set')
+        }})
+      });
+
       asyncTest('Update a record', function(){
         expect(5);
         var model = new MVC.AjaxModel({

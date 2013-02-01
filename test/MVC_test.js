@@ -119,6 +119,14 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         model1.clear();
         ok(model1.count() == 0, 'Clear all data');
       });
+      test('Load records', function(){
+        var data = [{key: 1, field1: 'field1'}, {key: 2, field1: 'field1', field2: 5}];
+        model1.load(data);
+        equal(model1.count() , 2, 'Load data into store')
+        data = [{key: 1, field1: 'field1'}, {key: 2, field1: 'field1', field2: -1}];
+        model1.load(data);
+        equal(model1.count() , 1, 'Load data into store with validation');
+      });
       test('Filter record', function(){
         var data1 = {key: 1, field1: 'field1'};
         var data2 = {key: 2, field1: 'field1', field2: 2};

@@ -82,8 +82,22 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         });
         return out;
       },
-      load: function(){
-
+      load: function(data){
+        if (data) {
+          var self = this;
+          this.clear();
+          $.each(data, function(index, obj){
+            var rec = self._record.create(obj);
+            if (rec) {
+              rec._key_ = self._genKey();
+              self._store[rec._key_] = rec;
+            } else {
+              console.error('Fail to create record' , obj)
+            }
+          });
+          this.trigger('onChange');
+          this.trigger('onLoad');
+        }
       },
       clear: function(){
         this._store = {};

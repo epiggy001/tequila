@@ -19,7 +19,7 @@ define(['../basic/oo', '../basic/util', './model'], function(oo, util, model){
         },
         error: function(qXHR, textStatus, errorThrown){
           if (callbacks.error && (typeof callbacks.error == 'function')) {
-            callbacks.success.call(self, rec, textStatus, errorThrown);
+            callbacks.error.call(self, rec, textStatus, errorThrown);
           }
         }
       })
@@ -40,7 +40,7 @@ define(['../basic/oo', '../basic/util', './model'], function(oo, util, model){
         },
         error: function(qXHR, textStatus, errorThrown){
           if (callbacks.error && (typeof callbacks.error == 'function')) {
-            callbacks.success.call(self, rec, textStatus, errorThrown);
+            callbacks.error.call(self, rec, textStatus, errorThrown);
           }
         }
       })
@@ -63,16 +63,42 @@ define(['../basic/oo', '../basic/util', './model'], function(oo, util, model){
         },
         error: function(qXHR, textStatus, errorThrown){
           if (callbacks.error && (typeof callbacks.error == 'function')) {
-            callbacks.success.call(self, rec, textStatus, errorThrown);
+            callbacks.error.call(self, rec, textStatus, errorThrown);
           }
         }
       });
-    },
+    }
   });
+  console.log(ajaxModel.prototype)
   ajaxModel = oo.extend(ajaxModel, {
     init: function(opt){
       this._super(opt);
       this._url = opt.url;
+    },
+    proto: {
+      load: function(opt){
+        var param = opt.param ? opt.param : null;
+        var success= opt.success ? opt.success : null;
+        var error= opt.error ? opt.error : null;
+        var self = this;
+        $.ajax({
+          url: this._url,
+          type:'GET',
+          data:param,
+          dataType: 'json',
+          success:function(data, textStatus , jqXHR){
+            model.prototype.load.call(self, data);
+            if (success && (typeof success == 'function')) {
+              success.call(self, data, param);
+            }
+          },
+          error: function(qXHR, textStatus, errorThrown){
+            if (error && (typeof error == 'function')) {
+              error.call(self, rec, textStatus, errorThrown);
+            }
+          }
+        })
+      }
     }
   })
   return ajaxModel;
