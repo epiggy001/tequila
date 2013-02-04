@@ -23,6 +23,11 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
         type: 'DELETE',
         responseText: { status:'ok'}
       });
+      $.mockjax({
+        url:  'test/1',
+        type: 'GET',
+        responseText: {ID:1, field1:'data1', field2:'data2'}
+      });
       module('AjaxModel');
       test('Create AjaxModel', function(){
         var model = new MVC.AjaxModel({
@@ -73,7 +78,27 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
           deepEqual(data, loadData, 'Data is set')
         }})
       });
-
+      asyncTest('Load a record', function(){
+        expect(7);
+        var model = new MVC.AjaxModel({
+          url:'test',
+          fields: [{name: 'ID'}, {name: 'field1'}, {name: 'field2'}],
+        });
+        model.bind('onChange', function(){
+          ok(true, 'onChange');
+        });
+        model.bind('onInsert', function(event, rec){
+          ok(rec.ID ==  1, 'onInsert: Rec ID is set right');
+          ok(rec.field1 ==  'data1', 'onInsert: Rec field1 is set right');
+          ok(rec.field2 ==  'data2', 'onInsert: Rec field2 is set right');
+        });
+        model.loadRecord({key:1, success: function(rec){
+          start();
+          ok(rec.ID ==  1, 'Rec ID is set right');
+          ok(rec.field1 ==  'data1', 'Rec field1 is set right');
+          ok(rec.field2 ==  'data2', 'Rec field2 is set right');
+        }})
+      });
       asyncTest('Update a record', function(){
         expect(5);
         var model = new MVC.AjaxModel({

@@ -69,7 +69,6 @@ define(['../basic/oo', '../basic/util', './model'], function(oo, util, model){
       });
     }
   });
-  console.log(ajaxModel.prototype)
   ajaxModel = oo.extend(ajaxModel, {
     init: function(opt){
       this._super(opt);
@@ -94,10 +93,36 @@ define(['../basic/oo', '../basic/util', './model'], function(oo, util, model){
           },
           error: function(qXHR, textStatus, errorThrown){
             if (error && (typeof error == 'function')) {
-              error.call(self, rec, textStatus, errorThrown);
+              error.call(self, textStatus, errorThrown);
             }
           }
-        })
+        });
+      },
+      loadRecord:function(opt) {
+        var key = opt.key ? opt.key : null;
+        if (!key) {
+          console.error('Key must be set');
+          return;
+        }
+        var success= opt.success ? opt.success : null;
+        var error= opt.error ? opt.error : null;
+        var self = this;
+        $.ajax({
+          url: this._url + '/' + key,
+          type:'GET',
+          dataType: 'json',
+          success:function(data, textStatus , jqXHR){
+            var rec = model.prototype.insert.call(self, data);
+            if (success && (typeof success == 'function')) {
+              success.call(self, util.clone(rec));
+            }
+          },
+          error: function(qXHR, textStatus, errorThrown){
+            if (error && (typeof error == 'function')) {
+              error.call(self, textStatus, errorThrown);
+            }
+          }
+        });
       }
     }
   })
