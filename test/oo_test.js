@@ -73,7 +73,7 @@ define(['../basic/oo'],function (oo) {
         var s = 0;
         var sum = function() {
           for (var i=0; i<arguments.length; i++) {
-            s+=i;
+            s+=arguments[i];
           }
         }
         instance.bind('event1', func1);

@@ -155,14 +155,14 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         model1.bind('onChange', function(){
           ok(true, 'onChange');
         });
-        model1.bind('onInsert', function(event, rec){
+        model1.bind('onInsert', function(rec){
           deepEqual(rec, this._store[rec._key_], 'OnInsert');
         });
-        model1.bind('onUpdate', function(event, old, now){
+        model1.bind('onUpdate', function(old, now){
           deepEqual(tmp, old, 'onUpdate: old');
           ok(now.field2 == 3, 'onUpdate: new');
         });
-        model1.bind('onRemove', function(event, rec){
+        model1.bind('onRemove', function(rec){
           deepEqual(rec1, rec);
         });
         var data1 = {key: 2, field1: 'field1', field2: 2};

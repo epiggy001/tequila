@@ -70,7 +70,12 @@ define(['./util'], function(util){
             return;
           }
           if ((this._callbacks) && (this._callbacks[ename])) {
-            this._callbacks[ename].fire.apply(this, arguments);
+            var args =[];
+            for (var i = 1; i<arguments.length; i++) {
+              args.push(arguments[i]);
+            }
+            console.log(arguments, args)
+            this._callbacks[ename].fire.apply(this, args);
           }
         }
       };
