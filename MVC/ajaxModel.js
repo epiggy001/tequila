@@ -67,6 +67,26 @@ define(['../basic/oo', '../basic/util', './model'], function(oo, util, model){
           }
         }
       });
+    },
+    clear: function(methodName, instance, args){
+      var callbacks = args.length > 0 ? args[0] : {};
+      instance.run();
+      var self = this;
+      $.ajax({
+        url: this._url,
+        type:'DELETE',
+        dataType: 'json',
+        success:function(data, textStatus , jqXHR){
+          if (callbacks.success && (typeof callbacks.success == 'function')) {
+            callbacks.success.call(self, data);
+          }
+        },
+        error: function(qXHR, textStatus, errorThrown){
+          if (callbacks.error && (typeof callbacks.error == 'function')) {
+            callbacks.error.call(self, rec, textStatus, errorThrown);
+          }
+        }
+      })
     }
   });
   ajaxModel = oo.extend(ajaxModel, {

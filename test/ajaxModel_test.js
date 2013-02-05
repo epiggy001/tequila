@@ -24,6 +24,11 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
         responseText: { status:'ok'}
       });
       $.mockjax({
+        url:  'test',
+        type: 'DELETE',
+        responseText: { status:'ok'}
+      });
+      $.mockjax({
         url:  'test/1',
         type: 'GET',
         responseText: {ID:1, field1:'data1', field2:'data2'}
@@ -146,6 +151,26 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
             equal(model.count(), 0, 'Delete from local')
           }
         });
+      });
+      asyncTest('Remove all records', function(){
+        expect(4);
+        var model = new MVC.AjaxModel({
+          url:'test',
+          fields: [{name: 'ID'}, {name: 'field1'}, {name: 'field2'}],
+        });
+        model.bind('onChange', function(){
+          ok(true, 'onChange');
+        });
+        model.bind('onClear', function(){
+          ok(true, 'onClear is trigger');
+        });
+        var conditions = {condtion1: 'condtion1'}
+        model.load({param:conditions, success: function(data, param){
+          model.clear({success: function(data){
+            start();
+            equal(data.status, 'ok', 'Delete all records'); 
+          }})
+        }});
       });
     }
   }

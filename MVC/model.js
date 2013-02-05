@@ -85,7 +85,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
       load: function(data){
         if (data) {
           var self = this;
-          this.clear();
+           this._store = {};
           $.each(data, function(index, obj){
             var rec = self._record.create(obj);
             if (rec) {
@@ -101,6 +101,8 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
       },
       clear: function(){
         this._store = {};
+        this.trigger('onChange');
+        this.trigger('onClear');
       },
       findByKey:function(key){
         var temp = this.filter(function(rec){
