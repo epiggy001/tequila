@@ -79,6 +79,16 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         deepEqual(model1.findByKey(rec1._key_), rec1 , 'Find by key');
         deepEqual(model1.findByKey("123412"), null , 'Test wrong key');
       });
+      test('Find', function(){
+        var data1 = {key: 123, field1: 'num'};
+        var data2 = {key: 145, field1: 'number'};
+        model1.insert(data1);
+        model1.insert(data2);
+        equal(model1.find(1).length, 2 , 'Find with number');
+        equal(model1.find(12).length, 1 , 'Find with number');
+        equal(model1.find('num').length, 2 , 'Find with string');
+        equal(model1.find('numb').length, 1 , 'Find with string');
+      });
       test('Remove record', function(){
         var data1 = {key: 1, field1: 'field1'};
         var data2 = {key: 2, field1: 'field1', field2: 2};
@@ -228,6 +238,45 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         equal($('#target').html(), '<div class="item">2</div>', 'Render template with filter');
         controller.render([{field1:3}]);
         equal($('#target').html(), '<div class="item">3</div>', 'Render template with data');
+      });
+
+      test('Create Search with filter', function(){
+        var model = new MVC.Model({
+          fields: [{name: 'field1', primary: true}],
+        });
+        model.insert({field1: 1});
+        model.insert({field1: 2});
+        var controller = new MVC.Controller({
+          model: model,
+          url: 'test/test.ejs',
+          renderTo: 'target',
+        });
+        controller.renderWithSearch('2');
+        equal($('#target').html(), '<div class="item">2</div>', 'Render template with search');
+      });
+
+      test('Create handler with simplified format', function(){
+        expect(4);
+        var model = new MVC.Model({
+          fields: [{name: 'field1', primary: true}],
+        });
+        model.insert({field1: 1});
+        model.insert({field1: 2});
+        var controller = new MVC.Controller({
+          model: model,
+          url: 'test/test.ejs',
+          renderTo: 'target',
+          handlers: {
+            ".item a click": function(event){
+              equal(this, controller, 'This is set');
+              ok(true, 'Div click is triggered');
+            }
+          }
+        });
+        controller.render();
+        var a = $('<a>');
+        $('.item').append(a);
+        $('.item a').trigger('click');
       });
     }
   }

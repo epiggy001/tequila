@@ -105,8 +105,10 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         this.trigger('onClear');
       },
       findByKey:function(key){
+        var self = this;
         var temp = this.filter(function(rec){
-          if (rec._key_ == key) {
+          var primary = self._primary;
+          if (rec[primary] == key || rec._key_ == key) {
             return true;
           } else {
             return false;
@@ -117,6 +119,31 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         } else {
           return null;
         }
+      },
+      find: function(key) {
+        var self = this;
+        var temp = this.filter(function(rec){
+          for (var index in rec) {
+            if (rec.hasOwnProperty(index)) {
+              if (key == '') {
+                return true;
+              }
+              var value = rec[index];
+              if ((typeof value == 'string') && (index != '_key_')) {
+                if (value.toLowerCase().indexOf(key.toString().toLowerCase()) != -1) {
+                  return true;
+                } 
+              }
+              if (typeof value == 'number') {
+                if (value.toString().indexOf(key.toString()) != -1) {
+                  return true;
+                }
+              }
+            }
+          }
+          return false;
+        });
+        return temp;
       }
     }
   })

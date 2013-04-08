@@ -38,6 +38,14 @@ define(['../basic/oo', '../basic/util', './EJS'], function(oo, util, EJS){
               rec.handler.call(self, event);
             });
           }
+          if ((typeof key == 'string') && (typeof rec == 'function')) {
+            var temp = key.split(" ");
+            var event = $.trim(temp.pop());
+            var selector = $.trim(temp.join(" "));
+            $('#' + self._renderTo).delegate(selector, event, function(event){
+              rec.call(self, event);
+            });
+          }
         })
         this.trigger('OnRender');
       },
@@ -53,7 +61,7 @@ define(['../basic/oo', '../basic/util', './EJS'], function(oo, util, EJS){
           this._tmpl = new EJS({url: this._url});
         }
         var input = this.data;
-        this._render(input)
+        this._render(input);
       },
       renderWithFilter: function(filter) {
         if (this.model && (typeof filter == 'function')) {
@@ -62,6 +70,14 @@ define(['../basic/oo', '../basic/util', './EJS'], function(oo, util, EJS){
           var input = this.data
         }
         this._render(input);
+      },
+      renderWithSearch: function(key) {
+        if (this.model && (typeof key == 'string')) {
+          var input = this.model.find(key);
+        } else {
+          var input = this.data
+        }
+        this.render(input);
       },
       destroy: function(){
          $('#' + this._renderTo).html('');

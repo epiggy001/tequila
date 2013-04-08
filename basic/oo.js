@@ -74,7 +74,6 @@ define(['./util'], function(util){
             for (var i = 1; i<arguments.length; i++) {
               args.push(arguments[i]);
             }
-            console.log(arguments, args)
             this._callbacks[ename].fire.apply(this, args);
           }
         }
