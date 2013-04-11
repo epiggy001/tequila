@@ -28,6 +28,19 @@ define([], function(){
         }
         return copy;
       }
+    },
+
+    randomStr: function(length, src) {
+      var key = "";
+      if (src) {
+        var source = src;
+      } else {
+        var source = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      }
+      for( var i=0; i < length; i++ ) {
+        key += source.charAt(Math.floor(Math.random() * source.length));
+      }
+      return key;
     }
   }
 })

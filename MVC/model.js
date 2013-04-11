@@ -11,12 +11,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
     },
     proto: {
       _genKey: function() {
-        var key = "";
-        var source = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        for( var i=0; i < 20; i++ ) {
-          key += source.charAt(Math.floor(Math.random() * source.length));
-        }
-        return key;
+        return util.randomStr(20);
       },
       _getData: function(rec) {
         var out = util.clone(rec);

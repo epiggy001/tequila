@@ -40,6 +40,9 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
           fields: [{name: 'ID'}, {name: 'field1'}, {name: 'field2'}],
         });    
         equal(model._url, 'test', 'Url is set');
+        if (typeof model.destroy == 'function') {
+          model.destroy();
+        }
       });
       asyncTest('Insert a record', function(){
         expect(6)
@@ -61,6 +64,9 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
             ok(rec.ID ==  1, 'Rec ID is set right');
             ok(rec.field1 ==  'data1', 'Rec field1 is set right');
             ok(rec.field2 ==  'data2', 'Rec field2 is set right');
+            if (typeof model.destroy == 'function') {
+              model.destroy();
+            }
           }
         });
       });
@@ -81,6 +87,9 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
           start();
           deepEqual(conditions, param, 'Param is set');
           deepEqual(data, loadData, 'Data is set')
+          if (typeof model.destroy == 'function') {
+            model.destroy();
+          }
         }})
       });
       asyncTest('Load a record', function(){
@@ -102,6 +111,9 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
           ok(rec.ID ==  1, 'Rec ID is set right');
           ok(rec.field1 ==  'data1', 'Rec field1 is set right');
           ok(rec.field2 ==  'data2', 'Rec field2 is set right');
+          if (typeof model.destroy == 'function') {
+            model.destroy();
+          }
         }})
       });
       asyncTest('Update a record', function(){
@@ -124,6 +136,9 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
               start();
               equal(record.field2, 'data3', 'Update at local')
               equal(data.status, '200', 'Update at server');
+              if (typeof model.destroy == 'function') {
+                model.destroy();
+              }
             }});
           }
         });
@@ -147,6 +162,9 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
             model.remove(record, {success:function(data){
               start();
               equal(data.status, 'ok', 'Delete from server');
+              if (typeof model.destroy == 'function') {
+                model.destroy();
+              }
             }});
             equal(model.count(), 0, 'Delete from local')
           }
@@ -169,6 +187,9 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
           model.clear({success: function(data){
             start();
             equal(data.status, 'ok', 'Delete all records'); 
+            if (typeof model.destroy == 'function') {
+              model.destroy();
+            }
           }})
         }});
       });

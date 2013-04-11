@@ -3,6 +3,9 @@ define(['../basic/oo', '../basic/util', './model', '../lib/dom-sql'], function(o
   var sqlModel = oo.extend(model, {
     init: function(opt) {
       this._super(opt);
+      if (!opt.name) {
+        opt.name = util.randomStr(10);
+      }
       this.name = 'local.' + opt.name;
       DomSQL.defineTable( this.name, opt.shcema);
     },
@@ -81,6 +84,11 @@ define(['../basic/oo', '../basic/util', './model', '../lib/dom-sql'], function(o
           this.trigger('onChange');
           this.trigger('onLoad');
         }
+      },
+
+      destroy: function() {
+        console.log(1)
+        DomSQL.dropTable(this.name);
       }
     }
   });
