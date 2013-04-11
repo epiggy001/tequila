@@ -1,6 +1,5 @@
 define(['./util', './oo'], function(util, oo) {
   'use strict';
-  util.setIndexedDB();
   var db = {};
   var decorator = function(database) {
     var _db = {};

@@ -1,10 +1,13 @@
-define(['./record', './model', './EJS', './controller', './ajaxModel'], function(record, model, EJS, controller, ajaxModel){
+define(['./record', './model', './EJS', './controller', './ajaxModelDecorator', './sqlModel'], 
+  function(record, model, EJS, controller, ajaxModelDecorator, sqlModel){
  'use strict';
   return {
     Record: record,
     Model: model,
-    AjaxModel:ajaxModel,
+    AjaxModel:ajaxModelDecorator(model),
     EJS: EJS,
-    Controller: controller
+    Controller: controller,
+    SqlModel:sqlModel,
+    SqlAjaxModel:ajaxModelDecorator(sqlModel)
   }
 })

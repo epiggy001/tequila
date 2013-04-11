@@ -1,6 +1,5 @@
 define(['../basic/util', '../basic/indexeddb'],function (util, db) {
   'use strict';
-  util.setIndexedDB();
   return {
     RunTests: function () {
       module('Indexed db');

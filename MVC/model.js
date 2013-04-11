@@ -7,7 +7,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
       this._primary = opt.primary ? opt.primary : 'ID';
     },
     stat:{
-      inf: oo.inf('model', ['insert', 'remove', 'update', 'load', 'getData', 'findByKey', 'filter'])
+      inf: oo.inf('model', ['insert', 'remove', 'update', 'load', 'getData', 'findByKey', 'filter', 'find'])
     },
     proto: {
       _genKey: function() {
@@ -34,6 +34,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         return util.clone(rec);
       },
       remove: function(rec) {
+        //Todo add support to remove by key
         if (!this._store[rec._key_]) {
           return;
         }
@@ -74,10 +75,9 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
       },
       filter: function(func) {
         var out = [];
-        $.each(this._store, function(key, value) {
-          var tmp = util.clone(value);
-          if (func(tmp)) {
-            out.push(tmp);
+        $.each(this.getData(), function(key, value) {
+          if (func(value)) {
+            out.push(value);
           };
         });
         return out;
