@@ -1,7 +1,20 @@
+/*
+ * Extend a model with ajax support. The http API is restful
+ * For exmaple:
+ *  var decorator = require('./ajaxModelDecorator');
+ *  var model = require('./model');
+ *  var ajaxModel = decorator(model);
+ *  var  AjaxModel = new ajaxModel({
+ *   url : 'base/url',
+ *   ....
+ *  })
+ * */
 define(['../basic/oo', '../basic/util'], function(oo, util){
  'use strict';
   return function (model) {
     var ajaxModel = oo.decorator(model, {
+      // Insert URL url should like
+      // http://base/url/job (POST)
       insert: function(methodName, instance, args){
         var rec = args[0];
         var callbacks = args.length > 1 ? args[1] : {};
@@ -25,6 +38,8 @@ define(['../basic/oo', '../basic/util'], function(oo, util){
           }
         })
       },
+      // Delete URL url should like
+      // http://base/url/job/id (DELETE)
       remove: function(methodName, instance, args){
         var rec = args[0];
         var callbacks = args.length > 1 ? args[1] : {};
@@ -46,6 +61,8 @@ define(['../basic/oo', '../basic/util'], function(oo, util){
           }
         })
       },
+      // Delete URL url should like
+      // http://base/url/job (PUT)
       update: function(methodName, instance, args){
         var rec = args[0];
         var obj = args.length > 1 ? args[1] : {};
@@ -90,6 +107,8 @@ define(['../basic/oo', '../basic/util'], function(oo, util){
         })
       }
     });
+    
+    // Add some functions to ajax model
     ajaxModel = oo.extend(ajaxModel, {
       init: function(opt){
         this._super(opt);

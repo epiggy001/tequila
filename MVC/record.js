@@ -1,3 +1,6 @@
+/*
+ * Define a class of record for modle to store
+ */
 define(['../basic/oo', '../basic/util'], function(oo, util){
   'use strict';
   var Record = oo.create({

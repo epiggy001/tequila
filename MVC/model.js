@@ -1,3 +1,17 @@
+/*
+ * Base class of model. Use a object to store data in memory
+ * For exmaple:
+ * var model = require('./model');
+ * var jobModel = new model({
+ *   fields: [{name: 'field1' ,default:'my-field'}, {name:'field2'}],
+ *   primary: 'field1', // Required, default value is ID,
+ *   validate: function(rec) {
+ *    ...
+ *   } 
+ *  // Validation function for each record,
+ *  // if is valid return true else return false
+ * });
+ */
 define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
   'use strict';
    var Model = oo.create({
@@ -7,7 +21,8 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
       this._primary = opt.primary ? opt.primary : 'ID';
     },
     stat:{
-      inf: oo.inf('model', ['insert', 'remove', 'update', 'load', 'getData', 'findByKey', 'filter', 'find'])
+      inf: oo.inf('model', ['insert', 'remove', 'update', 'load',
+        'getData', 'findByKey', 'filter', 'find'])
     },
     proto: {
       _genKey: function() {
@@ -18,6 +33,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         delete out._key_;
         return out;
       },
+      // Insert a record
       insert: function(obj) {
         var rec = this._record.create(obj);
         if (rec) {
@@ -28,6 +44,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         }
         return util.clone(rec);
       },
+      // Delete a record
       remove: function(rec) {
         //Todo add support to remove by key
         if (!this._store[rec._key_]) {
@@ -37,6 +54,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         this.trigger('onChange');
         this.trigger('onRemove', rec);
       },
+      // Update a record
       update: function(rec, obj) {
         var tmp = util.clone(rec);
         $.extend(tmp, obj)
@@ -47,6 +65,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
           $.extend(rec, obj);
         }
       },
+      // Given length of the model
       count: function() {
         var count = 0;
         for (var key in this._store) {
@@ -56,6 +75,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         }
         return count;
       },
+      // Get all data as an array from model
       getData: function(){
         var out = [];
         $.each(this._store, function(key, value) {
@@ -64,10 +84,12 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         })
         return out;
       },
+      // Get all data as json strong from the model
       toJSON: function(){
         var out = this.getData();
         return JSON.stringify(out);
       },
+      // Filter the data with the given function
       filter: function(func) {
         var out = [];
         $.each(this.getData(), function(key, value) {
@@ -77,6 +99,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         });
         return out;
       },
+      // Reload the model with given data
       load: function(data){
         if (data) {
           var self = this;
@@ -94,11 +117,13 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
           this.trigger('onLoad');
         }
       },
+      // Clear all data
       clear: function(){
         this._store = {};
         this.trigger('onChange');
         this.trigger('onClear');
       },
+      // Find a record with its primary key
       findByKey:function(key){
         var self = this;
         var temp = this.filter(function(rec){
@@ -115,6 +140,8 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
           return null;
         }
       },
+      // Search the model and return all the record contains the given
+      // key in any field
       find: function(key) {
         var self = this;
         var temp = this.filter(function(rec){
@@ -125,7 +152,8 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
               }
               var value = rec[index];
               if ((typeof value == 'string') && (index != '_key_')) {
-                if (value.toLowerCase().indexOf(key.toString().toLowerCase()) != -1) {
+                if (value.toLowerCase().indexOf(key.
+                  toString().toLowerCase()) != -1) {
                   return true;
                 } 
               }

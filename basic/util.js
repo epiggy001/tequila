@@ -1,6 +1,12 @@
+/*
+ * All utility functions defined there
+ */
 define([], function(){
   'use strict';
   return {
+    /*
+     * Deap clone an object
+     */
     clone: function clone(obj) {
       if (null == obj || typeof obj != 'object') {
         return obj;
@@ -30,12 +36,18 @@ define([], function(){
       }
     },
 
+    /*
+     * Generate a random string with given length and source
+     * If source is not given, use all letters (both cases) and numbers
+     * for default
+     */
     randomStr: function(length, src) {
       var key = "";
       if (src) {
         var source = src;
       } else {
-        var source = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var source =
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       }
       for( var i=0; i < length; i++ ) {
         key += source.charAt(Math.floor(Math.random() * source.length));

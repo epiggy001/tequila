@@ -1,3 +1,26 @@
+/*
+ * Define the controller class there. User can bind add events
+ * and render a view here
+ * For example
+ * var controller = require('./controller')
+ * var jobController = new controller({
+ *   model: myModel // Set related model,
+ *   tmpl: 'joblist.ejs' //Set related the view template,
+ *   renderTo: 'jobList' // Id of the DOM element to render the view,
+ *   events: {
+ *    event1: func1,
+ *    event2: func2
+ *   } // Define evnets and handlers for related view,
+ *   handlers: {
+ *    '.item click': function(event){
+ *      ...
+ *    },
+ *    '#add click': function(event){
+ *      ...
+ *    }
+ *   } // Add handlers to the related view
+ * })
+ */
 define(['../basic/oo', '../basic/util', './EJS'], function(oo, util, EJS){
   'use strict';
   var Controller = oo.create({
@@ -33,8 +56,11 @@ define(['../basic/oo', '../basic/util', './EJS'], function(oo, util, EJS){
         $('#' + this._renderTo).html('').append(elem);
         var self = this;
         $.each(this._handlers, function(key, rec){
-          if ((typeof rec.selector == 'string') && (typeof rec.event == 'string') && (typeof rec.handler == 'function')) {
-            $('#' + self._renderTo).delegate(rec.selector, rec.event, function(event){
+          if ((typeof rec.selector == 'string')
+            && (typeof rec.event == 'string') &&
+            (typeof rec.handler == 'function')) {
+            $('#' + self._renderTo).delegate(rec.selector, 
+            rec.event, function(event){
               rec.handler.call(self, event);
             });
           }
@@ -49,6 +75,7 @@ define(['../basic/oo', '../basic/util', './EJS'], function(oo, util, EJS){
         })
         this.trigger('OnRender');
       },
+      // Render a view with the model(no data is given) or the given data
       render : function(data){
         if (data) {
           this._setData(data);
@@ -63,6 +90,7 @@ define(['../basic/oo', '../basic/util', './EJS'], function(oo, util, EJS){
         var input = this.data;
         this._render(input);
       },
+      // Render a view with the given model and filter for filtering data
       renderWithFilter: function(filter) {
         if (this.model && (typeof filter == 'function')) {
           var input = this.model.filter(filter);
@@ -71,6 +99,7 @@ define(['../basic/oo', '../basic/util', './EJS'], function(oo, util, EJS){
         }
         this._render(input);
       },
+      // Render a view with the given model and search key for filtering data
       renderWithSearch: function(key) {
         if (this.model && (typeof key == 'string')) {
           var input = this.model.find(key);
@@ -79,6 +108,7 @@ define(['../basic/oo', '../basic/util', './EJS'], function(oo, util, EJS){
         }
         this.render(input);
       },
+      // Destory the related veiw
       destroy: function(){
          $('#' + this._renderTo).html('');
       }

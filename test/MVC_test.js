@@ -14,7 +14,8 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
           [{name:'field1', def: 1}, {name:'field2'}],
           validate
         );
-        deepEqual(record1._opt, {field1:{def:1}, field2:{def:null}}, 'Test recored fields');
+        deepEqual(record1._opt,
+        {field1:{def:1}, field2:{def:null}}, 'Test recored fields');
         equal(record1.validate, validate, 'Test Validation function');
       });
       test('Create a Record', function(){
@@ -52,7 +53,8 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         }
       });
       test('Create Model', function(){
-        deepEqual(model1._record, new MVC.Record([{name: 'key'}, {name: 'field1'}, {name: 'field2', def: 1}], validation),
+        deepEqual(model1._record, new MVC.Record([{name: 'key'},
+          {name: 'field1'}, {name: 'field2', def: 1}], validation),
           'Record is created');
         deepEqual(model1._primary, 'ID', 'Pirmary Key is ID');
         var model2 = new MVC.Model({
@@ -69,7 +71,8 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         deepEqual(model1._store[rec1._key_], rec1 , 'Insert into store');
         var tmp = util.clone(rec1);
         rec1.field1 ='feild2';
-        deepEqual(model1._store[rec1._key_], tmp , 'Return record set to read only');
+        deepEqual(model1._store[rec1._key_], tmp ,
+          'Return record set to read only');
         var rec2 = model1.insert(data2);
         equal(rec2, null, 'Reject invalidate record');
       });
@@ -102,10 +105,12 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         var data = {key: 1, field1: 'field1'};
         var rec = model1.insert(data);
         var out = model1.update(rec, {field1: 'field2'});
-        ok(rec.key == 1 && rec.field1 == 'field2' && rec.field2 == 1, 'Return record is updated');
+        ok(rec.key == 1 && rec.field1 == 'field2' && rec.field2 == 1,
+          'Return record is updated');
         deepEqual(model1._store[rec._key_], rec, 'Update success');
         model1.update(rec ,{field2: -1});
-        ok(rec.key == 1 && rec.field1 == 'field2' && rec.field2 == 1, 'Return record is not updated');
+        ok(rec.key == 1 && rec.field1 == 'field2' && rec.field2 == 1,
+          'Return record is not updated');
         deepEqual(model1._store[rec._key_], rec, 'Reject success');
         var tmp = util.clone(rec);
         rec.field1 = 'field3';
@@ -130,10 +135,12 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         ok(model1.count() == 0, 'Clear all data');
       });
       test('Load records', function(){
-        var data = [{key: 1, field1: 'field1'}, {key: 2, field1: 'field1', field2: 5}];
+        var data = [{key: 1, field1: 'field1'}, 
+          {key: 2, field1: 'field1', field2: 5}];
         model1.load(data);
         equal(model1.count() , 2, 'Load data into store')
-        data = [{key: 1, field1: 'field1'}, {key: 2, field1: 'field1', field2: -1}];
+        data = [{key: 1, field1: 'field1'},
+          {key: 2, field1: 'field1', field2: -1}];
         model1.load(data);
         equal(model1.count() , 1, 'Load data into store with validation');
       });
@@ -157,7 +164,8 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         var data2 = {key: 2, field1: 'field1', field2: 2};
         var rec1 = model1.insert(data1);
         var rec2 = model1.insert(data2);
-        ok(model1.toJSON() , [{"key":1,"field1":"field1","field2":1},{"key":2,"field1":"field1","field2":2}], 
+        ok(model1.toJSON() , [{"key":1,"field1":"field1","field2":1},
+          {"key":2,"field1":"field1","field2":2}], 
           'JSON format is right');
       });
       test('Trigger Event', function(){
@@ -183,8 +191,9 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
       });
       module('MVC: EJS');
       test('Render EJS', function(){
-        var tmpl = new MVC.EJS({url: 'test/hello.ejs'}).render({message: 'hello, world'});
-        equal(tmpl , 'hello, world', 'Render template')
+        var tmpl = new MVC.EJS({url: 'test/hello.ejs'}).
+          render({message: 'hello, world'});
+        equal($.trim(tmpl) , 'hello, world', 'Render template')
       });
       module('MVC: Controller', {
         setup:function(){
@@ -227,7 +236,9 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         controller.trigger('Customize');
         equal(controller.model, model, 'Set model');
         deepEqual(controller.data, model.getData(), 'Set data');
-        equal($('#target').html(), '<div class="item">1</div>\n\n   <div class="item">2</div>', 'Render template');
+        equal($('#target').html(), 
+          '<div class="item">1</div>\n\n   <div class="item">2</div>',
+          'Render template');
         controller.renderWithFilter(function(rec){
           if (rec.field1 > 1) {
             return true;
@@ -235,9 +246,11 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
             return false;
           }
         });
-        equal($('#target').html(), '<div class="item">2</div>', 'Render template with filter');
+        equal($('#target').html(), '<div class="item">2</div>', 
+          'Render template with filter');
         controller.render([{field1:3}]);
-        equal($('#target').html(), '<div class="item">3</div>', 'Render template with data');
+        equal($('#target').html(), '<div class="item">3</div>', 
+          'Render template with data');
       });
 
       test('Create Search with filter', function(){
@@ -252,7 +265,8 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
           renderTo: 'target',
         });
         controller.renderWithSearch('2');
-        equal($('#target').html(), '<div class="item">2</div>', 'Render template with search');
+        equal($('#target').html(), '<div class="item">2</div>',
+          'Render template with search');
       });
 
       test('Create handler with simplified format', function(){

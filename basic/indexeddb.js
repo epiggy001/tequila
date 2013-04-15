@@ -16,7 +16,7 @@ define(['./util', './oo'], function(util, oo) {
             success(event);
           }
         };
-        
+
         transaction.onerror = function(event) {
           console.error("IndexedDB.add Error: " , event.target);
           if (typeof error === 'function') {

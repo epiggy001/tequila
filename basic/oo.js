@@ -1,6 +1,12 @@
+/*
+ * All oo related methods defined in this module
+ */
 define(['./util'], function(util){
   'use strict';
   return ({
+    /*
+     * Define a interface with interface name and method name.
+     * */
     inf: function(name, methods){
       var inf = {};
       inf.methods=[];
@@ -10,15 +16,20 @@ define(['./util'], function(util){
           inf.methods.push(methods[i])
         }
       }
+      /*
+       * Check if the object imeplements all the method of the interface
+       * */
       inf.validate = function(instance){
         if (!instance) {
           return false;
         }
         var result = true;
         for (var i = 0; i<this.methods.length; i++) {
-          if (!instance[this.methods[i]] || (typeof instance[this.methods[i]] != 'function')) {
+          if (!instance[this.methods[i]] ||
+            (typeof instance[this.methods[i]] != 'function')) {
             result = false;
-            console.error(this.methods[i] + ' must be implemented for interface: ' + this.name);
+            console.error(this.methods[i] +
+              ' must be implemented for interface: ' + this.name);
             break;
           }
         }
@@ -26,6 +37,31 @@ define(['./util'], function(util){
       }
       return inf
     },
+    /*
+     * Create a class
+     * For example:
+     *  oo = reqire ('./basic');
+     *  var klass = oo.create({
+     *    int: function(o){
+     *        ...
+     *    } // Constructor,
+     *    stat: {
+     *      stat_func: function(){
+     *        ...
+     *      }
+     *    } // Stastic function,
+     *    proto: {
+     *      func: function)() {
+     *        ...
+     *      }
+     *    } // function for instacne
+     *  });
+     *
+     *  Moreover there all there pre-defined functions for each class
+     *    bind(name, handler) Bind handler to event for the instance
+     *    unbind(name, hankler) Unbind handler for an event from the instance
+     *    trigger(name) Trigger an event
+     * */
     create: function(obj) {
       var klass;
       var constructor
@@ -82,7 +118,8 @@ define(['./util'], function(util){
         for (var key in obj.proto) {
           if (obj.proto.hasOwnProperty(key)) {
             if (typeof obj.proto[key] == 'object') {
-              console.warn('Object or array for property of class is copy by refrence. You\'beeter set it in init()')
+              console.warn('Object or array for property of class is'
+                + 'copy by refrence. You\'beeter set it in init()')
             } 
             klass.prototype[key] = obj.proto[key];
           }
@@ -90,6 +127,23 @@ define(['./util'], function(util){
       }
       return klass;
     },
+
+    /*
+     * Extend a class
+     * For example:
+     *  var oo = require('./baisc.js');
+     *  var klass= oo.extend(parent, {
+     *   init: function() {
+     *    ...
+     *   },
+     *   proto: {
+     *    func: function(o){
+     *      this._super(o) // call method from super class
+     *      ....
+     *    }
+     *   }
+     * })
+     */
     extend: function(parent, obj) {
       var klass;
       var init;
@@ -117,9 +171,11 @@ define(['./util'], function(util){
         for (var key in obj.proto) {
           if (obj.proto.hasOwnProperty(key)) {
             if (typeof obj.proto[key] == 'object') {
-              console.warn('Object or array for property of class is copy by refrence. You\'beeter set it in init()')
+              console.warn('Object or array for property of' + 
+                'class is copy by refrence. You\'beeter set it in init()')
               klass.prototype[key] = obj.proto[key];
-            } else if ((typeof obj.proto[key] == 'function') && (typeof parent.prototype[key] == 'function')) {
+            } else if ((typeof obj.proto[key] == 'function') &&
+              (typeof parent.prototype[key] == 'function')) {
               klass.prototype[key] = (function(_super,method){
                 return function(){
                   var temp = this._super;
@@ -137,6 +193,9 @@ define(['./util'], function(util){
       }
       return klass;
     },
+    /*
+     * Another way to extend a class
+     */
     decorator: function(target, opt){
       var klass = function() {
         target.apply(this, arguments);

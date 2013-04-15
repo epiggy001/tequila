@@ -24,8 +24,10 @@ define(['../basic/oo'],function (oo) {
           foo: 1
         }
         equal(inf1.validate(instance1), true, 'Instance is validate');
-        equal(inf1.validate(instance2), false, 'Not all methods is implemented');
-        equal(inf1.validate(instance3), false, 'Method must be implemented with a function')
+        equal(inf1.validate(instance2),
+          false, 'Not all methods is implemented');
+        equal(inf1.validate(instance3),
+          false, 'Method must be implemented with a function')
       });
       module('Class');
       test('Create Class', function() {
@@ -138,14 +140,17 @@ define(['../basic/oo'],function (oo) {
         var instance1 = new class1('val1');
         var instance2 = new class2('val1', 'val2');
         var instance3 = new class3('val1', 1);
-        equal(instance1.property1, instance2.property1, 'Property in inherited');
+        equal(instance1.property1, instance2.property1,
+          'Property in inherited');
         equal(instance1.method1(), instance2.method1(), 'Method is inherited');
         equal(instance2.property2, 3, 'Property is over written');
         equal(instance2.method2(), 3, 'Method is over wrritten');
         equal(instance2.property3, 4, 'New property is added');
         equal(instance2.method3(), 4, 'New method is added'); 
-        ok((instance3.val1 == 'val1' && instance3.val2 == 1), '_super is set successfully in constructor');
-        ok((instance3.method1() == 1 && instance3.method2() == 3), '_super is set successfully in method');
+        ok((instance3.val1 == 'val1' && instance3.val2 == 1),
+          '_super is set successfully in constructor');
+        ok((instance3.method1() == 1 && instance3.method2() == 3),
+          '_super is set successfully in method');
       })
        module('Decorator');
        test('Create Decorator', function(){

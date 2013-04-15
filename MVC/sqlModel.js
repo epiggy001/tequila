@@ -1,4 +1,8 @@
-define(['../basic/oo', '../basic/util', './model', '../lib/dom-sql'], function(oo, util, model) {
+/*
+ * The model with a sql like db to store data
+ */
+define(['../basic/oo', '../basic/util', './model', '../lib/dom-sql'], 
+  function(oo, util, model) {
   'use strict';
   var sqlModel = oo.extend(model, {
     init: function(opt) {
@@ -26,7 +30,8 @@ define(['../basic/oo', '../basic/util', './model', '../lib/dom-sql'], function(o
         } else {
           var id = o[this._primary];
         }
-        var sql = 'delete from ' + this.name + ' where ' + this._primary + ' = ' + id;
+        var sql = 'delete from ' + this.name +
+          ' where ' + this._primary + ' = ' + id;
         DomSQL.query(sql);
         this.trigger('onChange');
         this.trigger('onRemove', o);
@@ -41,7 +46,8 @@ define(['../basic/oo', '../basic/util', './model', '../lib/dom-sql'], function(o
             sql += index + ' = ' + value + ' , ';
           });
           sql = sql.substr(0, sql.length - 3);
-          sql = 'update ' + this.name + ' set ' + sql + ' where ' + this._primary + ' = ' + rec[this._primary];
+          sql = 'update ' + this.name + ' set ' + sql + ' where ' +
+            this._primary + ' = ' + rec[this._primary];
           DomSQL.query(sql);
           this.trigger('onChange');
           this.trigger('onUpdate', util.clone(rec), util.clone(tmp));

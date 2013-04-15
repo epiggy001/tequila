@@ -1,4 +1,5 @@
-define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, util) {
+define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],
+  function (MVC, util) {
   'use strict';
   return {
     RunTests: function(moduleName, modelClass){
@@ -7,7 +8,8 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
         type:'POST',
         responseText: { primary:1}
       });
-      var loadData = [{ID:1, field1:'data1', field2:'data2'}, {ID:2, field1:'data3', field2:'data4'}];
+      var loadData = [{ID:1, field1:'data1', field2:'data2'},
+        {ID:2, field1:'data3', field2:'data4'}];
       $.mockjax({
         url:  'test',
         type:'GET',
@@ -86,7 +88,7 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],function (MVC, u
         model.load({param:conditions, success: function(data, param){
           start();
           deepEqual(conditions, param, 'Param is set');
-          deepEqual(data, loadData, 'Data is set')
+          deepEqual(data, loadData, 'Data is set');
           if (typeof model.destroy == 'function') {
             model.destroy();
           }

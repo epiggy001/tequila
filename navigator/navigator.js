@@ -1,3 +1,15 @@
+/*
+ * Class used to navigate between different hash url
+ * For example
+ * var nav = require('./navigator');
+ * var myNav = new nav({
+ *   'job/{id}': function(data){
+ *      var id = data.id
+ *      ...
+ *   } //Handlers for #job/{jobId} like #job/3,
+ *   ...
+ * });
+ */
 define(['../basic/oo', '../basic/util'], function(oo, util){
   'use strict';
   function checkBrace(url) {
