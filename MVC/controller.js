@@ -59,7 +59,7 @@ define(['../basic/oo', '../basic/util', './EJS'], function(oo, util, EJS){
           if ((typeof rec.selector == 'string')
             && (typeof rec.event == 'string') &&
             (typeof rec.handler == 'function')) {
-            $('#' + self._renderTo).delegate(rec.selector, 
+            $('#' + self._renderTo).delegate(rec.selector,
             rec.event, function(event){
               rec.handler.call(self, event);
             });

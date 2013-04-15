@@ -135,7 +135,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         ok(model1.count() == 0, 'Clear all data');
       });
       test('Load records', function(){
-        var data = [{key: 1, field1: 'field1'}, 
+        var data = [{key: 1, field1: 'field1'},
           {key: 2, field1: 'field1', field2: 5}];
         model1.load(data);
         equal(model1.count() , 2, 'Load data into store')
@@ -165,7 +165,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         var rec1 = model1.insert(data1);
         var rec2 = model1.insert(data2);
         ok(model1.toJSON() , [{"key":1,"field1":"field1","field2":1},
-          {"key":2,"field1":"field1","field2":2}], 
+          {"key":2,"field1":"field1","field2":2}],
           'JSON format is right');
       });
       test('Trigger Event', function(){
@@ -236,7 +236,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         controller.trigger('Customize');
         equal(controller.model, model, 'Set model');
         deepEqual(controller.data, model.getData(), 'Set data');
-        equal($('#target').html(), 
+        equal($('#target').html(),
           '<div class="item">1</div>\n\n   <div class="item">2</div>',
           'Render template');
         controller.renderWithFilter(function(rec){
@@ -246,10 +246,10 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
             return false;
           }
         });
-        equal($('#target').html(), '<div class="item">2</div>', 
+        equal($('#target').html(), '<div class="item">2</div>',
           'Render template with filter');
         controller.render([{field1:3}]);
-        equal($('#target').html(), '<div class="item">3</div>', 
+        equal($('#target').html(), '<div class="item">3</div>',
           'Render template with data');
       });
 

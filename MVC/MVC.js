@@ -2,7 +2,7 @@
  * Merge all MVC related API together
  */
 define(['./record', './model', './EJS', './controller',
-  './ajaxModelDecorator', './sqlModel'], 
+  './ajaxModelDecorator', './sqlModel'],
   function(record, model, EJS, controller, ajaxModelDecorator, sqlModel){
  'use strict';
   return {

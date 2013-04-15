@@ -13,7 +13,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
     });
     return model
   }
-  
+
   var clearModel = function(name) {
     DomSQL.dropTable(name)
   }
@@ -33,7 +33,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         deepEqual(temp, {id: 1, field1:1, field2: 'field'})
         clearModel('testTable1');
       });
-      
+
       test('Delete from sqlModel', function(){
         var model = setModel('testTable2');
         var rec1 = model.insert({field1:1, field2: 'field1'});
@@ -51,11 +51,12 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         var model = setModel('testTable3');
         var rec = model.insert({field1:1, field2: 'field1'});
         model.update(rec, {field1: 2});
-        var temp = DomSQL.query('select * from local.testTable3 where id =' + rec.id);
+        var temp = DomSQL.query('select * from local.testTable3 where id =' +
+          rec.id);
         equal(rec, temp[0] , 'Update form sqlModel')
         clearModel('testTable3');
       });
-      
+
       test('Count record', function() {
         var model = setModel('testTable4');
         ok(model.count()==0, 'Init state is ok');
@@ -79,7 +80,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         deepEqual(temp, [rec1, rec2] , 'Get all data from model');
         clearModel('testTable5');
       });
-      
+
       test('Clear all records', function() {
         var model = setModel('testTable6');
         var data1 = {field1: 'field1'};

@@ -7,7 +7,7 @@
  *   primary: 'field1', // Required, default value is ID,
  *   validate: function(rec) {
  *    ...
- *   } 
+ *   }
  *  // Validation function for each record,
  *  // if is valid return true else return false
  * });
@@ -155,7 +155,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
                 if (value.toLowerCase().indexOf(key.
                   toString().toLowerCase()) != -1) {
                   return true;
-                } 
+                }
               }
               if (typeof value == 'number') {
                 if (value.toString().indexOf(key.toString()) != -1) {

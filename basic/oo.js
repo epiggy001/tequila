@@ -61,7 +61,7 @@ define(['./util'], function(util){
             if (typeof obj.proto[key] == 'object') {
               console.warn('Object or array for property of class is'
                 + 'copy by refrence. You\'beeter set it in init()')
-            } 
+            }
             klass.prototype[key] = obj.proto[key];
           }
         }
@@ -172,7 +172,7 @@ define(['./util'], function(util){
         for (var key in obj.proto) {
           if (obj.proto.hasOwnProperty(key)) {
             if (typeof obj.proto[key] == 'object') {
-              console.warn('Object or array for property of' + 
+              console.warn('Object or array for property of' +
                 'class is copy by refrence. You\'beeter set it in init()')
               klass.prototype[key] = obj.proto[key];
             } else if ((typeof obj.proto[key] == 'function') &&

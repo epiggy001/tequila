@@ -146,7 +146,7 @@ define(['../basic/oo'],function (oo) {
         equal(instance2.property2, 3, 'Property is over written');
         equal(instance2.method2(), 3, 'Method is over wrritten');
         equal(instance2.property3, 4, 'New property is added');
-        equal(instance2.method3(), 4, 'New method is added'); 
+        equal(instance2.method3(), 4, 'New method is added');
         ok((instance3.val1 == 'val1' && instance3.val2 == 1),
           '_super is set successfully in constructor');
         ok((instance3.method1() == 1 && instance3.method2() == 3),

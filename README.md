@@ -1,6 +1,6 @@
 Tequila
 =======
-A MVC JS framework basing on jQuery 
+A MVC JS framework basing on jQuery
 
 Dependency
 

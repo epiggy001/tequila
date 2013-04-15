@@ -1,7 +1,7 @@
 /*
  * The model with a sql like db to store data
  */
-define(['../basic/oo', '../basic/util', './model', '../lib/dom-sql'], 
+define(['../basic/oo', '../basic/util', './model', '../lib/dom-sql'],
   function(oo, util, model) {
   'use strict';
   var sqlModel = oo.extend(model, {

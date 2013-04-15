@@ -40,7 +40,7 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],
         var model = new modelClass({
           url:'test',
           fields: [{name: 'ID'}, {name: 'field1'}, {name: 'field2'}],
-        });    
+        });
         equal(model._url, 'test', 'Url is set');
         if (typeof model.destroy == 'function') {
           model.destroy();
@@ -188,7 +188,7 @@ define(['../MVC/MVC', '../basic/util', '../lib/jquery.mockjax'],
         model.load({param:conditions, success: function(data, param){
           model.clear({success: function(data){
             start();
-            equal(data.status, 'ok', 'Delete all records'); 
+            equal(data.status, 'ok', 'Delete all records');
             if (typeof model.destroy == 'function') {
               model.destroy();
             }
