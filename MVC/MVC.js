@@ -8,10 +8,10 @@ define(['./record', './model', './EJS', './controller',
   return {
     Record: record,
     Model: model,
-    AjaxModel:ajaxModelDecorator(model),
+    AjaxModel:ajaxModelDecorator.apply(model),
     EJS: EJS,
     Controller: controller,
     SqlModel:sqlModel,
-    SqlAjaxModel:ajaxModelDecorator(sqlModel)
+    SqlAjaxModel:ajaxModelDecorator.apply(sqlModel)
   }
 })

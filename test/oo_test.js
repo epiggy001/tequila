@@ -172,7 +172,7 @@ define(['../basic/oo'],function (oo) {
             }
           }
         });
-        var class2 = oo.decorator(class1, {
+        var decorator = new oo.decorator({
           method1: function(methodName, instance, args){
             args[0]+=1;
             return instance.run();
@@ -183,7 +183,8 @@ define(['../basic/oo'],function (oo) {
           method3: function(methodName, instance, args){
              return instance.run() + 1;
           },
-        })
+        });
+        var class2 = decorator.apply(class1);
         var instance2 = new class2(1);
         equal(instance2.method1(2), 3 , 'Arguments is not read-only');
         equal(instance2.method2(), true , 'Method is set right')

@@ -93,7 +93,6 @@ define(['../basic/oo', '../basic/util', './model', '../lib/dom-sql'],
       },
 
       destroy: function() {
-        console.log(1)
         DomSQL.dropTable(this.name);
       }
     }

@@ -3,66 +3,7 @@
  */
 define(['./util'], function(util){
   'use strict';
-  return ({
-    /*
-     * Define a interface with interface name and method name.
-     * */
-    inf: function(name, methods){
-      var inf = {};
-      inf.methods=[];
-      inf.name = (typeof name === 'string') ? name : 'unamed interface';
-      for (var i = 0; i<methods.length; i++) {
-        if (typeof methods[i] === 'string') {
-          inf.methods.push(methods[i])
-        }
-      }
-      /*
-       * Check if the object imeplements all the method of the interface
-       * */
-      inf.validate = function(instance){
-        if (!instance) {
-          return false;
-        }
-        var result = true;
-        for (var i = 0; i<this.methods.length; i++) {
-          if (!instance[this.methods[i]] ||
-            (typeof instance[this.methods[i]] != 'function')) {
-            result = false;
-            console.error(this.methods[i] +
-              ' must be implemented for interface: ' + this.name);
-            break;
-          }
-        }
-        return result;
-      }
-      return inf
-    },
-    /*
-     * Create a class
-     * For example:
-     *  oo = reqire ('./basic');
-     *  var klass = oo.create({
-     *    int: function(o){
-     *        ...
-     *    } // Constructor,
-     *    stat: {
-     *      stat_func: function(){
-     *        ...
-     *      }
-     *    } // Stastic function,
-     *    proto: {
-     *      func: function)() {
-     *        ...
-     *      }
-     *    } // function for instacne
-     *  });
-     *
-     *  Moreover there all there pre-defined functions for each class
-     *    bind(name, handler) Bind handler to event for the instance
-     *    unbind(name, hankler) Unbind handler for an event from the instance
-     *    trigger(name) Trigger an event
-     * */
-    create: function(obj) {
+  var _create = function(obj) {
       var klass;
       var constructor
       if (obj.init && (typeof obj.init == 'function')) {
@@ -126,7 +67,67 @@ define(['./util'], function(util){
         }
       }
       return klass;
+  };
+  return ({
+    /*
+     * Define a interface with interface name and method name.
+     * */
+    inf: function(name, methods){
+      var inf = {};
+      inf.methods=[];
+      inf.name = (typeof name === 'string') ? name : 'unamed interface';
+      for (var i = 0; i<methods.length; i++) {
+        if (typeof methods[i] === 'string') {
+          inf.methods.push(methods[i])
+        }
+      }
+      /*
+       * Check if the object imeplements all the method of the interface
+       * */
+      inf.validate = function(instance){
+        if (!instance) {
+          return false;
+        }
+        var result = true;
+        for (var i = 0; i<this.methods.length; i++) {
+          if (!instance[this.methods[i]] ||
+            (typeof instance[this.methods[i]] != 'function')) {
+            result = false;
+            console.error(this.methods[i] +
+              ' must be implemented for interface: ' + this.name);
+            break;
+          }
+        }
+        return result;
+      }
+      return inf
     },
+    /*
+     * Create a class
+     * For example:
+     *  oo = reqire ('./basic');
+     *  var klass = oo.create({
+     *    int: function(o){
+     *        ...
+     *    } // Constructor,
+     *    stat: {
+     *      stat_func: function(){
+     *        ...
+     *      }
+     *    } // Stastic function,
+     *    proto: {
+     *      func: function)() {
+     *        ...
+     *      }
+     *    } // function for instacne
+     *  });
+     *
+     *  Moreover there all there pre-defined functions for each class
+     *    bind(name, handler) Bind handler to event for the instance
+     *    unbind(name, hankler) Unbind handler for an event from the instance
+     *    trigger(name) Trigger an event
+     * */
+    create: _create,
 
     /*
      * Extend a class
@@ -196,35 +197,45 @@ define(['./util'], function(util){
     /*
      * Another way to extend a class
      */
-    decorator: function(target, opt){
-      var klass = function() {
-        target.apply(this, arguments);
-      };
-      var tmp = function(){};
-      tmp.prototype = target.stat;
-      klass.stat = new tmp();
-      tmp.prototype = target.prototype;
-      klass.prototype = new tmp();
-      if (opt) {
-        $.each(opt,function(key, func){
-          if (typeof func == 'function') {
-            if (typeof klass.prototype[key] == 'function'){
-              klass.prototype[key] = (function (method, methodName){
-                return function(){
-                  var args = arguments
-                  var self = this;
-                  var instance = {};
-                  instance.run = function(){
-                    return method.apply(self, args)
-                  }
-                  return func.call(this, methodName, instance, arguments)
+    decorator: _create({
+      init: function(opt){
+        this._opt = opt;
+      },
+      proto: {
+        apply: function(target){
+          var opt = this._opt;
+          var klass = function() {
+            target.apply(this, arguments);
+          };
+          var tmp = function(){};
+          tmp.prototype = target.stat;
+          klass.stat = new tmp();
+          tmp.prototype = target.prototype;
+          klass.prototype = new tmp();
+          if (opt) {
+            $.each(opt,function(key, func){
+              if (typeof func == 'function') {
+                if (typeof klass.prototype[key] == 'function') {
+                  klass.prototype[key] = (function (method, methodName){
+                    return function(){
+                      var args = arguments
+                      var self = this;
+                      var instance = {};
+                      instance.run = function(){
+                        return method.apply(self, args)
+                      }
+                      return func.call(this, methodName, instance, arguments)
+                    }
+                  }(klass.prototype[key], key))
+                } else if (typeof klass.prototype[key] == 'undefined'){
+                  klass.prototype[key] = opt[key];
                 }
-              }(klass.prototype[key], key))
-            }
+              }
+            });
           }
-        });
+          return klass;
+        }
       }
-      return klass;
-    }
+    })
   })
 })
