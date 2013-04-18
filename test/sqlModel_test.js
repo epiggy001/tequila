@@ -1,3 +1,8 @@
+// Copyright 2013 Clustertech Limited. All rights reserved.
+// Clustertech Cloud Management Platform.
+//
+// Author: jackeychen@clustertech.com
+
 define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
   'use strict';
   var setModel = function(name) {
@@ -18,23 +23,23 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
     DomSQL.dropTable(name)
   }
   return {
-    RunTests: function(){
+    RunTests: function() {
       var model;
       module('sqlModel');
-      test('Create sqlModel', function(){
+      test('Create sqlModel', function() {
         var model = setModel('testTable');
         equal(DomSQL.tableExists('local.testTable'), true, 'Model is init');
         clearModel('testTable');
       });
 
-      test('Insert to sqlModel', function(){
+      test('Insert to sqlModel', function() {
         var model = setModel('testTable1');
         var temp = model.insert({field1:1, field2: 'field'});
         deepEqual(temp, {id: 1, field1:1, field2: 'field'})
         clearModel('testTable1');
       });
 
-      test('Delete from sqlModel', function(){
+      test('Delete from sqlModel', function() {
         var model = setModel('testTable2');
         var rec1 = model.insert({field1:1, field2: 'field1'});
         var rec2 = model.insert({field1:2, field2: 'field2'});
@@ -47,7 +52,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         clearModel('testTable2');
       });
 
-      test('Update from sqlModel', function(){
+      test('Update from sqlModel', function() {
         var model = setModel('testTable3');
         var rec = model.insert({field1:1, field2: 'field1'});
         model.update(rec, {field1: 2});
@@ -59,14 +64,14 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
 
       test('Count record', function() {
         var model = setModel('testTable4');
-        ok(model.count()==0, 'Init state is ok');
+        ok(model.count() === 0, 'Init state is ok');
         var data1 = {field1: 'field1'};
         var data2 = {field1: 'field1', field2: 2};
         var rec1 = model.insert(data1);
         var rec2 = model.insert(data2);
-        ok(model.count()==2, 'State after insert is ok');
+        ok(model.count() === 2, 'State after insert is ok');
         model.remove(rec1);
-        ok(model.count()==1, 'State after remove is ok');
+        ok(model.count() === 1, 'State after remove is ok');
         clearModel('testTable4');
       });
 
@@ -92,7 +97,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         clearModel('testTable6');
       });
 
-      test('Load records', function(){
+      test('Load records', function() {
         var model = setModel('testTable7');
         var data = [{field1: 'field1'}, {field1: 'field1', field2: 2}];
         model.load(data);

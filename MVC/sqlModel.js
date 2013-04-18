@@ -1,3 +1,8 @@
+// Copyright 2013 Clustertech Limited. All rights reserved.
+// Clustertech Cloud Management Platform.
+//
+// Author: jackeychen@clustertech.com
+
 /*
  * The model with a sql like db to store data
  */
@@ -60,7 +65,7 @@ define(['../basic/oo', '../basic/util', './model', '../lib/dom-sql'],
         return temp.length;
       },
 
-      getData: function(){
+      getData: function() {
         var out = [];
         var temp = DomSQL.query('select * from ' + this.name);
         $.each(temp, function(key, value) {
@@ -69,17 +74,17 @@ define(['../basic/oo', '../basic/util', './model', '../lib/dom-sql'],
         return out;
       },
 
-      clear: function(){
+      clear: function() {
         DomSQL.query('delete from ' + this.name);
         this.trigger('onChange');
         this.trigger('onClear');
       },
 
-      load: function(data){
+      load: function(data) {
         if (data) {
           var self = this;
           DomSQL.query('delete from ' + this.name);
-          $.each(data, function(index, obj){
+          $.each(data, function(index, obj) {
             var rec = self._record.create(obj);
             if (rec) {
               DomSQL.insert(self.name, [rec]);

@@ -1,14 +1,19 @@
+// Copyright 2013 Clustertech Limited. All rights reserved.
+// Clustertech Cloud Management Platform.
+//
+// Author: jackeychen@clustertech.com
+
 /*
  * All utility functions defined there
  */
-define([], function(){
+define([], function() {
   'use strict';
   return {
     /*
      * Deap clone an object
      */
     clone: function clone(obj) {
-      if (null == obj || typeof obj != 'object') {
+      if (null === obj || typeof obj != 'object') {
         return obj;
       }
       if (obj instanceof Date) {

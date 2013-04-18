@@ -1,3 +1,8 @@
+// Copyright 2013 Clustertech Limited. All rights reserved.
+// Clustertech Cloud Management Platform.
+//
+// Author: jackeychen@clustertech.com
+
 /*
  * Base class of model. Use a object to store data in memory
  * For exmaple:
@@ -12,7 +17,8 @@
  *  // if is valid return true else return false
  * });
  */
-define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
+define(['../basic/oo', '../basic/util', './record'],
+  function(oo, util, Record) {
   'use strict';
    var Model = oo.create({
     init: function(opt) {
@@ -28,11 +34,13 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
       _genKey: function() {
         return util.randomStr(20);
       },
+
       _getData: function(rec) {
         var out = util.clone(rec);
         delete out._key_;
         return out;
       },
+
       // Insert a record
       insert: function(obj) {
         var rec = this._record.create(obj);
@@ -44,6 +52,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         }
         return util.clone(rec);
       },
+
       // Delete a record
       remove: function(rec) {
         //Todo add support to remove by key
@@ -54,6 +63,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         this.trigger('onChange');
         this.trigger('onRemove', rec);
       },
+
       // Update a record
       update: function(rec, obj) {
         var tmp = util.clone(rec);
@@ -65,6 +75,7 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
           $.extend(rec, obj);
         }
       },
+
       // Given length of the model
       count: function() {
         var count = 0;
@@ -75,8 +86,9 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         }
         return count;
       },
+
       // Get all data as an array from model
-      getData: function(){
+      getData: function() {
         var out = [];
         $.each(this._store, function(key, value) {
           var tmp = util.clone(value);
@@ -84,11 +96,13 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         })
         return out;
       },
+
       // Get all data as json strong from the model
-      toJSON: function(){
+      toJSON: function() {
         var out = this.getData();
         return JSON.stringify(out);
       },
+
       // Filter the data with the given function
       filter: function(func) {
         var out = [];
@@ -99,12 +113,14 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
         });
         return out;
       },
+
       // Reload the model with given data
-      load: function(data){
+      load: function(data) {
         if (data) {
           var self = this;
-           this._store = {};
-          $.each(data, function(index, obj){
+          this._store = {};
+
+          $.each(data, function(index, obj) {
             var rec = self._record.create(obj);
             if (rec) {
               rec._key_ = self._genKey();
@@ -117,18 +133,21 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
           this.trigger('onLoad');
         }
       },
+
       // Clear all data
-      clear: function(){
+      clear: function() {
         this._store = {};
         this.trigger('onChange');
         this.trigger('onClear');
       },
+
       // Find a record with its primary key
-      findByKey:function(key){
+      findByKey:function(key) {
         var self = this;
-        var temp = this.filter(function(rec){
+
+        var temp = this.filter(function(rec) {
           var primary = self._primary;
-          if (rec[primary] == key || rec._key_ == key) {
+          if (rec[primary] === key || rec._key_ === key) {
             return true;
           } else {
             return false;
@@ -140,24 +159,25 @@ define(['../basic/oo', '../basic/util', './record'], function(oo, util, Record){
           return null;
         }
       },
+
       // Search the model and return all the record contains the given
       // key in any field
       find: function(key) {
         var self = this;
-        var temp = this.filter(function(rec){
+        var temp = this.filter(function(rec) {
           for (var index in rec) {
             if (rec.hasOwnProperty(index)) {
-              if (key == '') {
+              if (key === '') {
                 return true;
               }
               var value = rec[index];
-              if ((typeof value == 'string') && (index != '_key_')) {
+              if ((typeof value === 'string') && (index != '_key_')) {
                 if (value.toLowerCase().indexOf(key.
                   toString().toLowerCase()) != -1) {
                   return true;
                 }
               }
-              if (typeof value == 'number') {
+              if (typeof value === 'number') {
                 if (value.toString().indexOf(key.toString()) != -1) {
                   return true;
                 }

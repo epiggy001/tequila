@@ -1,9 +1,14 @@
+// Copyright 2013 Clustertech Limited. All rights reserved.
+// Clustertech Cloud Management Platform.
+//
+// Author: jackeychen@clustertech.com
+
 define(['../basic/util'],function (util) {
   'use strict';
   return {
     RunTests: function () {
       module('Utility functions');
-      test('Clone', function(){
+      test('Clone', function() {
         equal(util.clone(null), null, 'Clone null');
         equal(util.clone('string'), 'string', 'Clone string');
         equal(util.clone(1), 1, 'Clone number');

@@ -1,7 +1,12 @@
+// Copyright 2013 Clustertech Limited. All rights reserved.
+// Clustertech Cloud Management Platform.
+//
+// Author: jackeychen@clustertech.com
+
 /*
- * Define a class of record for modle to store
+ * Define a class of record for model to store
  */
-define(['../basic/oo', '../basic/util'], function(oo, util){
+define(['../basic/oo', '../basic/util'], function(oo, util) {
   'use strict';
   var Record = oo.create({
     init: function(opt, validation) {

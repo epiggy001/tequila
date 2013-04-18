@@ -1,17 +1,22 @@
+// Copyright 2013 Clustertech Limited. All rights reserved.
+// Clustertech Cloud Management Platform.
+//
+// Author: jackeychen@clustertech.com
+
 /*
  * All oo related methods defined in this module
  */
-define(['./util'], function(util){
+define(['./util'], function(util) {
   'use strict';
   var _create = function(obj) {
       var klass;
       var constructor
-      if (obj.init && (typeof obj.init == 'function')) {
+      if (obj.init && (typeof obj.init === 'function')) {
         klass = obj.init;
       } else {
-        klass = function(){};
+        klass = function() {};
       }
-      if (obj.stat && (typeof obj.stat == 'object')) {
+      if (obj.stat && (typeof obj.stat === 'object')) {
         for (var key in obj.stat) {
           if (obj.stat.hasOwnProperty(key)) {
             klass[key] = obj.stat[key];
@@ -19,7 +24,7 @@ define(['./util'], function(util){
         }
       }
       klass.prototype = {
-        bind:function(ename, handler){
+        bind:function(ename, handler) {
           if (!this._callbacks) {
             this._callbacks = {};
           }
@@ -28,19 +33,21 @@ define(['./util'], function(util){
           }
           this._callbacks[ename].add(handler);
         },
-        unbind:function(ename, handler){
+
+        unbind:function(ename, handler) {
           if (!this._callbacks) {
             return;
           }
           if (this._callbacks[ename]) {
-            if (handler == null) {
+            if (typeof handler === 'undefined') {
               this._callbacks[ename] = null;
               return;
             }
             this._callbacks[ename].remove(handler);
           }
         },
-        trigger:function(){
+
+        trigger:function() {
           if (arguments.length > 0 ) {
            var ename = arguments[0];
           } else {
@@ -55,10 +62,10 @@ define(['./util'], function(util){
           }
         }
       };
-      if (obj.proto && (typeof obj.proto == 'object')) {
+      if (obj.proto && (typeof obj.proto === 'object')) {
         for (var key in obj.proto) {
           if (obj.proto.hasOwnProperty(key)) {
-            if (typeof obj.proto[key] == 'object') {
+            if (typeof obj.proto[key] === 'object') {
               console.warn('Object or array for property of class is'
                 + 'copy by refrence. You\'beeter set it in init()')
             }
@@ -68,11 +75,12 @@ define(['./util'], function(util){
       }
       return klass;
   };
+
   return ({
     /*
      * Define a interface with interface name and method name.
      * */
-    inf: function(name, methods){
+    inf: function(name, methods) {
       var inf = {};
       inf.methods=[];
       inf.name = (typeof name === 'string') ? name : 'unamed interface';
@@ -81,10 +89,11 @@ define(['./util'], function(util){
           inf.methods.push(methods[i])
         }
       }
+
       /*
        * Check if the object imeplements all the method of the interface
        * */
-      inf.validate = function(instance){
+      inf.validate = function(instance) {
         if (!instance) {
           return false;
         }
@@ -102,16 +111,17 @@ define(['./util'], function(util){
       }
       return inf
     },
+
     /*
      * Create a class
      * For example:
      *  oo = reqire ('./basic');
      *  var klass = oo.create({
-     *    int: function(o){
+     *    int: function(o) {
      *        ...
      *    } // Constructor,
      *    stat: {
-     *      stat_func: function(){
+     *      stat_func: function() {
      *        ...
      *      }
      *    } // Stastic function,
@@ -138,7 +148,7 @@ define(['./util'], function(util){
      *    ...
      *   },
      *   proto: {
-     *    func: function(o){
+     *    func: function(o) {
      *      this._super(o) // call method from super class
      *      ....
      *    }
@@ -148,37 +158,37 @@ define(['./util'], function(util){
     extend: function(parent, obj) {
       var klass;
       var init;
-      if (obj.init && (typeof obj.init == 'function')) {
+      if (obj.init && (typeof obj.init === 'function')) {
         init = obj.init;
       } else {
-        init = function(){};
+        init = function() {};
       }
-      klass = function(){
+      klass = function() {
         this._super = parent;
         init.apply(this, arguments)
       };
       // Static methids and properties cannot be inherited
-      if (obj.stat && (typeof obj.stat == 'object')) {
+      if (obj.stat && (typeof obj.stat === 'object')) {
         for (var key in obj.stat) {
           if (obj.stat.hasOwnProperty(key)) {
             klass[key] = obj.stat[key];
           }
         }
       }
-      var tmp = function(){}
+      var tmp = function() {}
       tmp.prototype = parent.prototype;
       klass.prototype =new tmp();
-      if (obj.proto && (typeof obj.proto == 'object')) {
+      if (obj.proto && (typeof obj.proto === 'object')) {
         for (var key in obj.proto) {
           if (obj.proto.hasOwnProperty(key)) {
-            if (typeof obj.proto[key] == 'object') {
+            if (typeof obj.proto[key] === 'object') {
               console.warn('Object or array for property of' +
                 'class is copy by refrence. You\'beeter set it in init()')
               klass.prototype[key] = obj.proto[key];
-            } else if ((typeof obj.proto[key] == 'function') &&
-              (typeof parent.prototype[key] == 'function')) {
-              klass.prototype[key] = (function(_super,method){
-                return function(){
+            } else if ((typeof obj.proto[key] === 'function') &&
+              (typeof parent.prototype[key] === 'function')) {
+              klass.prototype[key] = (function(_super,method) {
+                return function() {
                   var temp = this._super;
                   this._super = _super;
                   var result = method.apply(this, arguments);
@@ -194,40 +204,41 @@ define(['./util'], function(util){
       }
       return klass;
     },
+
     /*
      * Another way to extend a class
      */
     decorator: _create({
-      init: function(opt){
+      init: function(opt) {
         this._opt = opt;
       },
       proto: {
-        apply: function(target){
+        apply: function(target) {
           var opt = this._opt;
           var klass = function() {
             target.apply(this, arguments);
           };
-          var tmp = function(){};
+          var tmp = function() {};
           tmp.prototype = target.stat;
           klass.stat = new tmp();
           tmp.prototype = target.prototype;
           klass.prototype = new tmp();
           if (opt) {
-            $.each(opt,function(key, func){
-              if (typeof func == 'function') {
-                if (typeof klass.prototype[key] == 'function') {
-                  klass.prototype[key] = (function (method, methodName){
-                    return function(){
+            $.each(opt,function(key, func) {
+              if (typeof func === 'function') {
+                if (typeof klass.prototype[key] === 'function') {
+                  klass.prototype[key] = (function (method, methodName) {
+                    return function() {
                       var args = arguments
                       var self = this;
                       var instance = {};
-                      instance.run = function(){
+                      instance.run = function() {
                         return method.apply(self, args)
                       }
                       return func.call(this, methodName, instance, arguments)
                     }
                   }(klass.prototype[key], key))
-                } else if (typeof klass.prototype[key] == 'undefined'){
+                } else if (typeof klass.prototype[key] === 'undefined') {
                   klass.prototype[key] = opt[key];
                 }
               }

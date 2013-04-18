@@ -1,3 +1,8 @@
+// Copyright 2013 Clustertech Limited. All rights reserved.
+// Clustertech Cloud Management Platform.
+//
+// Author: jackeychen@clustertech.com
+
 define(['../basic/oo'],function (oo) {
   'use strict';
   return {
@@ -10,17 +15,18 @@ define(['../basic/oo'],function (oo) {
         var inf2 = oo.inf('inf2', ['function1', 'function2', function3])
         equal(inf2.methods.length, 2 ,'Only string is accepted as method name')
       });
-      test('Validate Interface', function(){
+
+      test('Validate Interface', function() {
         var inf1 = oo.inf('inf1', ['bar', 'foo']);
         var instance1 = {
-          bar: function(){},
-          foo: function(){}
+          bar: function() {},
+          foo: function() {}
         };
         var instance2 = {
-          bar: function(){}
+          bar: function() {}
         };
         var instance3 = {
-          bar: function(){},
+          bar: function() {},
           foo: 1
         }
         equal(inf1.validate(instance1), true, 'Instance is validate');
@@ -29,23 +35,24 @@ define(['../basic/oo'],function (oo) {
         equal(inf1.validate(instance3),
           false, 'Method must be implemented with a function')
       });
+
       module('Class');
       test('Create Class', function() {
         var class1 = oo.create({});
         ok(new class1(), 'Success create empty class');
         var class2 = oo.create({
-          init: function(val){
+          init: function(val) {
             this.val = val;
           },
           stat:{
             statValue: 1,
-            statMethod: function(){
+            statMethod: function() {
               return 'method';
             }
           },
           proto:{
             value: 2,
-            method: function(){
+            method: function() {
               return 'non static method'
             }
           }
@@ -58,7 +65,8 @@ define(['../basic/oo'],function (oo) {
         equal(class2.statValue, 1 , 'Set static property');
         equal(class2.statMethod(), 'method' ,'Set static method');
       });
-      test('Basic functions', function(){
+
+      test('Basic functions', function() {
         var class1 = oo.create({
           proto: {
             val1: 1,
@@ -66,13 +74,17 @@ define(['../basic/oo'],function (oo) {
           }
         });
         var instance = new class1();
-        var func1 = function(){
+
+        var func1 = function() {
           instance.val1 += 1;
         }
+
         var func2 = function() {
           instance.val2 += 1;
         }
+
         var s = 0;
+
         var sum = function() {
           for (var i=0; i<arguments.length; i++) {
             s+=arguments[i];
@@ -94,40 +106,41 @@ define(['../basic/oo'],function (oo) {
         instance.trigger('event1');
         equal(instance.val2, 4, 'func2 unbinded');
       });
-      test('Extend Class', function(){
+
+      test('Extend Class', function() {
         var class1 = oo.create({
-          init:function(val1){
+          init:function(val1) {
             this.val1 = val1;
           },
           proto:{
             property1: 1,
             property2: 2,
-            method1: function(){
+            method1: function() {
               return 1
             },
-            method2:function(){
+            method2:function() {
               return 2
             }
           }
         });
         var class2 = oo.extend(class1, {
-          inint:function(val1, val2){
+          inint:function(val1, val2) {
             this.val1 = val1;
             this.val2 = val2
           },
           proto:{
             property2:3,
             property3:4,
-            method2:function(){
+            method2:function() {
               return 3
             },
-            method3:function(){
+            method3:function() {
               return 4;
             }
           }
         });
         var class3 =oo.extend(class1, {
-          init:function(val1,val2){
+          init:function(val1,val2) {
             this._super(val1);
             this.val2 = val2;
           },
@@ -136,7 +149,7 @@ define(['../basic/oo'],function (oo) {
               return this._super() + this.val2;
             }
           }
-        })
+        });
         var instance1 = new class1('val1');
         var instance2 = new class2('val1', 'val2');
         var instance3 = new class3('val1', 1);
@@ -147,13 +160,14 @@ define(['../basic/oo'],function (oo) {
         equal(instance2.method2(), 3, 'Method is over wrritten');
         equal(instance2.property3, 4, 'New property is added');
         equal(instance2.method3(), 4, 'New method is added');
-        ok((instance3.val1 == 'val1' && instance3.val2 == 1),
+        ok((instance3.val1 === 'val1' && instance3.val2 === 1),
           '_super is set successfully in constructor');
-        ok((instance3.method1() == 1 && instance3.method2() == 3),
+        ok((instance3.method1() === 1 && instance3.method2() === 3),
           '_super is set successfully in method');
       })
-       module('Decorator');
-       test('Create Decorator', function(){
+
+      module('Decorator');
+      test('Create Decorator', function() {
         var class1 = oo.create({
           init: function(num) {
             this.num = num;
@@ -161,10 +175,10 @@ define(['../basic/oo'],function (oo) {
           proto:{
             property1: 1,
             property2: 2,
-            method1: function(val){
+            method1: function(val) {
               return val
             },
-            method2:function(){
+            method2:function() {
               return 2
             },
             method3: function() {
@@ -173,14 +187,14 @@ define(['../basic/oo'],function (oo) {
           }
         });
         var decorator = new oo.decorator({
-          method1: function(methodName, instance, args){
+          method1: function(methodName, instance, args) {
             args[0]+=1;
             return instance.run();
           },
-          method2: function(methodName, instance, args){
+          method2: function(methodName, instance, args) {
             return true;
           },
-          method3: function(methodName, instance, args){
+          method3: function(methodName, instance, args) {
              return instance.run() + 1;
           },
         });

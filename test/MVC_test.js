@@ -1,9 +1,14 @@
+// Copyright 2013 Clustertech Limited. All rights reserved.
+// Clustertech Cloud Management Platform.
+//
+// Author: jackeychen@clustertech.com
+
 define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
   'use strict';
   return {
     RunTests: function () {
       module('MVC: Record');
-      test('Init a Record', function(){
+      test('Init a Record', function() {
         var validate = function(rec) {
           if (!rec.field2 || rec.field2 < 10) {
             return false;
@@ -18,7 +23,8 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         {field1:{def:1}, field2:{def:null}}, 'Test recored fields');
         equal(record1.validate, validate, 'Test Validation function');
       });
-      test('Create a Record', function(){
+
+      test('Create a Record', function() {
         var validate = function(rec) {
           if (!rec.field2 || rec.field2 < 10) {
             return false;
@@ -36,6 +42,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         var rec1 = record1.create({field2: 9});
         equal(rec1, null, 'Check Validation');
       });
+
       var model1;
       var validation = function(rec) {
         if (rec.field2 < 0) {
@@ -44,6 +51,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         return true;
       }
       var fields = [{name: 'key'}, {name: 'field1'}, {name: 'field2', def: 1}];
+
       module('MVC: model', {
         setup: function() {
           model1 = new MVC.Model({
@@ -52,7 +60,8 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
           });
         }
       });
-      test('Create Model', function(){
+
+      test('Create Model', function() {
         deepEqual(model1._record, new MVC.Record([{name: 'key'},
           {name: 'field1'}, {name: 'field2', def: 1}], validation),
           'Record is created');
@@ -64,7 +73,8 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         });
         deepEqual(model2._primary, 'myKey', 'Pirmary Key is set');
       });
-      test('Insert record', function(){
+
+      test('Insert record', function() {
         var data1 = {key: 1, field1: 'field1'};
         var data2 = {key: 2, field1: 'field1', field2: -1};
         var rec1 = model1.insert(data1);
@@ -76,13 +86,15 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         var rec2 = model1.insert(data2);
         equal(rec2, null, 'Reject invalidate record');
       });
-      test('Find by key', function(){
+
+      test('Find by key', function() {
         var data1 = {key: 1, field1: 'field1'};
         var rec1 = model1.insert(data1);
         deepEqual(model1.findByKey(rec1._key_), rec1 , 'Find by key');
         deepEqual(model1.findByKey("123412"), null , 'Test wrong key');
       });
-      test('Find', function(){
+
+      test('Find', function() {
         var data1 = {key: 123, field1: 'num'};
         var data2 = {key: 145, field1: 'number'};
         model1.insert(data1);
@@ -92,7 +104,8 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         equal(model1.find('num').length, 2 , 'Find with string');
         equal(model1.find('numb').length, 1 , 'Find with string');
       });
-      test('Remove record', function(){
+
+      test('Remove record', function() {
         var data1 = {key: 1, field1: 'field1'};
         var data2 = {key: 2, field1: 'field1', field2: 2};
         var rec1 = model1.insert(data1);
@@ -101,40 +114,44 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         equal(model1._store[rec1._key_], null, 'Remove record');
         deepEqual(model1._store[rec2._key_], rec2 , 'No side effect');
       });
-      test('Update record', function(){
+
+      test('Update record', function() {
         var data = {key: 1, field1: 'field1'};
         var rec = model1.insert(data);
         var out = model1.update(rec, {field1: 'field2'});
-        ok(rec.key == 1 && rec.field1 == 'field2' && rec.field2 == 1,
+        ok(rec.key === 1 && rec.field1 === 'field2' && rec.field2 === 1,
           'Return record is updated');
         deepEqual(model1._store[rec._key_], rec, 'Update success');
         model1.update(rec ,{field2: -1});
-        ok(rec.key == 1 && rec.field1 == 'field2' && rec.field2 == 1,
+        ok(rec.key === 1 && rec.field1 === 'field2' && rec.field2 === 1,
           'Return record is not updated');
         deepEqual(model1._store[rec._key_], rec, 'Reject success');
         var tmp = util.clone(rec);
         rec.field1 = 'field3';
         deepEqual(model1._store[rec._key_], tmp, 'No side effect');
       });
-      test('Count record', function(){
-        ok(model1.count()==0, 'Init state is ok');
+
+      test('Count record', function() {
+        ok(model1.count() === 0, 'Init state is ok');
         var data1 = {key: 1, field1: 'field1'};
         var data2 = {key: 2, field1: 'field1', field2: 2};
         var rec1 = model1.insert(data1);
         var rec2 = model1.insert(data2);
-        ok(model1.count()==2, 'State after insert is ok');
+        ok(model1.count() === 2, 'State after insert is ok');
         model1.remove(rec1);
-        ok(model1.count()==1, 'State after remove is ok');
+        ok(model1.count() === 1, 'State after remove is ok');
       });
-      test('Clear store', function(){
+
+      test('Clear store', function() {
         var data1 = {key: 1, field1: 'field1'};
         var data2 = {key: 2, field1: 'field1', field2: 2};
         var rec1 = model1.insert(data1);
         var rec2 = model1.insert(data2);
         model1.clear();
-        ok(model1.count() == 0, 'Clear all data');
+        ok(model1.count() === 0, 'Clear all data');
       });
-      test('Load records', function(){
+
+      test('Load records', function() {
         var data = [{key: 1, field1: 'field1'},
           {key: 2, field1: 'field1', field2: 5}];
         model1.load(data);
@@ -144,12 +161,13 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         model1.load(data);
         equal(model1.count() , 1, 'Load data into store with validation');
       });
-      test('Filter record', function(){
+
+      test('Filter record', function() {
         var data1 = {key: 1, field1: 'field1'};
         var data2 = {key: 2, field1: 'field1', field2: 2};
         var rec1 = model1.insert(data1);
         var rec2 = model1.insert(data2);
-        var func = function(rec){
+        var func = function(rec) {
           if (rec.field2 > 1) {
             return  true;
           }
@@ -159,7 +177,8 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         ok(out.length, 1 , 'Get right number of records');
         deepEqual(out[0], rec2 , 'Get right record');
       });
-      test('Model to JSON', function(){
+
+      test('Model to JSON', function() {
         var data1 = {key: 1, field1: 'field1'};
         var data2 = {key: 2, field1: 'field1', field2: 2};
         var rec1 = model1.insert(data1);
@@ -168,39 +187,47 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
           {"key":2,"field1":"field1","field2":2}],
           'JSON format is right');
       });
-      test('Trigger Event', function(){
+
+      test('Trigger Event', function() {
         expect(7);
-        model1.bind('onChange', function(){
+        model1.bind('onChange', function() {
           ok(true, 'onChange');
         });
-        model1.bind('onInsert', function(rec){
+
+        model1.bind('onInsert', function(rec) {
           deepEqual(rec, this._store[rec._key_], 'OnInsert');
         });
-        model1.bind('onUpdate', function(old, now){
+
+        model1.bind('onUpdate', function(old, now) {
           deepEqual(tmp, old, 'onUpdate: old');
-          ok(now.field2 == 3, 'onUpdate: new');
+          ok(now.field2 === 3, 'onUpdate: new');
         });
-        model1.bind('onRemove', function(rec){
+
+        model1.bind('onRemove', function(rec) {
           deepEqual(rec1, rec);
         });
+
         var data1 = {key: 2, field1: 'field1', field2: 2};
         var rec1 = model1.insert(data1);
         var tmp = util.clone(rec1);
         model1.update(rec1, {field2: 3});
         model1.remove(rec1);
       });
+
       module('MVC: EJS');
-      test('Render EJS', function(){
+      test('Render EJS', function() {
         var tmpl = new MVC.EJS({url: 'test/hello.ejs'}).
           render({message: 'hello, world'});
         equal($.trim(tmpl) , 'hello, world', 'Render template')
       });
+
       module('MVC: Controller', {
-        setup:function(){
+        setup:function() {
           $("#qunit-fixture").append("<div id='target'></div>");
         }
       });
-      test('Create Controller', function(){
+
+      test('Create Controller', function() {
         expect(16);
         var model = new MVC.Model({
           fields: [{name: 'field1', primary: true}],
@@ -212,20 +239,20 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
           url: 'test/test.ejs',
           renderTo: 'target',
           events:{
-            'BeforeRender': function(){
+            'BeforeRender': function() {
               ok(true, 'BeforeRender Event trigger');
             },
-            'OnRender': function(){
+            'OnRender': function() {
               ok(true, 'OnRender trigger');
             },
-            'Customize': function(){
+            'Customize': function() {
               equal(this.model, model, 'Test key word of this');
             }
           },
           handlers: [{
             event: 'click',
             selector: '.item',
-            handler: function(event){
+            handler: function(event) {
               equal(this, controller, 'This is set');
               ok(true, 'Div click is triggered');
             }
@@ -239,7 +266,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
         equal($('#target').html(),
           '<div class="item">1</div>\n\n   <div class="item">2</div>',
           'Render template');
-        controller.renderWithFilter(function(rec){
+        controller.renderWithFilter(function(rec) {
           if (rec.field1 > 1) {
             return true;
           } else {
@@ -253,7 +280,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
           'Render template with data');
       });
 
-      test('Create Search with filter', function(){
+      test('Create Search with filter', function() {
         var model = new MVC.Model({
           fields: [{name: 'field1', primary: true}],
         });
@@ -269,7 +296,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
           'Render template with search');
       });
 
-      test('Create handler with simplified format', function(){
+      test('Create handler with simplified format', function() {
         expect(4);
         var model = new MVC.Model({
           fields: [{name: 'field1', primary: true}],
@@ -281,7 +308,7 @@ define(['../MVC/MVC', '../basic/util'],function (MVC, util) {
           url: 'test/test.ejs',
           renderTo: 'target',
           handlers: {
-            ".item a click": function(event){
+            ".item a click": function(event) {
               equal(this, controller, 'This is set');
               ok(true, 'Div click is triggered');
             }

@@ -1,32 +1,37 @@
+// Copyright 2013 Clustertech Limited. All rights reserved.
+// Clustertech Cloud Management Platform.
+//
+// Author: jackeychen@clustertech.com
+
 /*
  * Class used to navigate between different hash url
  * For example
  * var nav = require('./navigator');
  * var myNav = new nav({
- *   'job/{id}': function(data){
+ *   'job/{id}': function(data) {
  *      var id = data.id
  *      ...
  *   } //Handlers for #job/{jobId} like #job/3,
  *   ...
  * });
  */
-define(['../basic/oo', '../basic/util'], function(oo, util){
+define(['../basic/oo', '../basic/util'], function(oo, util) {
   'use strict';
   function checkBrace(url) {
     var out = [0];
     var level = 0;
     for (var i=0; i < url.length ; i++) {
-      if (url[i] == '{') {
+      if (url[i] === '{') {
         level++;
-        if (level == 1) {
+        if (level === 1) {
           out.push(i);
         } else {
           console.error('Bad url template');
           return null;
         }
-      } else if (url[i] == '}') {
+      } else if (url[i] === '}') {
         level--;
-        if (level == 0) {
+        if (level === 0) {
           out.push(i+1);
         } else {
           console.error('Bad url template');
@@ -41,6 +46,7 @@ define(['../basic/oo', '../basic/util'], function(oo, util){
     out.push(url.length)
     return out;
   }
+
   function match(url, tpl) {
     var braces = checkBrace(tpl);
     var sub;
@@ -66,23 +72,26 @@ define(['../basic/oo', '../basic/util'], function(oo, util){
     }
     return data;
   }
+
   var Navigator = oo.create({
-    init: function(map){
+    init: function(map) {
       if (!map) {
         return {};
       }
       var self = this;
       self._handlers = [];
+
       $.each(map, function(key, value) {
-        if ((typeof key == 'string') && (typeof value == 'function')) {
+        if ((typeof key === 'string') && (typeof value === 'function')) {
           self._handlers.push({tpl: key , fn: value});
         }
       });
-      $(window).bind( 'hashchange', function(e){
+
+      $(window).bind( 'hashchange', function(e) {
         var url = window.location.hash.slice(1);
-        $.each(self._handlers, function(key, handler){
+        $.each(self._handlers, function(key, handler) {
           var tpl = handler.tpl;
-          if (tpl == url) {
+          if (tpl === url) {
             handler.fn.call(self);
           } else {
             var data = match(url, tpl);
