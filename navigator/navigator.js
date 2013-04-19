@@ -11,7 +11,7 @@
  *   'job/{id}': function(data) {
  *      var id = data.id
  *      ...
- *   } //Handlers for #job/{jobId} like #job/3,
+ *   } //Handlers for hash #job/{jobId} like #job/3,
  *   ...
  * });
  */
